@@ -66,8 +66,20 @@ export default function AlbumPage({
       </button>
 
         <div className="album-page-header">
-          <div className="album-page-cover-placeholder">
-            {/* Album image will go here later */}
+          <div className="album-cover-container">
+
+            {album.cover_path ? (
+              <img
+                className="album-cover"
+                src={`http://localhost:3000${album.cover_path}`}
+                alt={`${album.title} album cover`}
+              />
+            ) : (
+              <div
+                className="album-cover-placeholder"
+                aria-label="No album cover available"
+              />
+            )}
           </div>
 
           <div className="album-page-info">

@@ -5,6 +5,7 @@ export interface Album {
   title: string;
   artist_id: number;
   year: number | null;
+  cover_path: string | null;
 
   artists: {
     id: number;

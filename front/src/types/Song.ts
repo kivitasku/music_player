@@ -14,5 +14,6 @@ export interface Song {
   albums: {
     id: number;
     title: string;
+    cover_path: string | null;
   } | null;
 }

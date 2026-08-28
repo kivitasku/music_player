@@ -39,16 +39,28 @@ export default function AlbumLink({
             {album.artists?.name ?? "No artist"}
           </a>
 
+
         )}
 
 
         <p>{album.year ?? "Unknown year"}</p>
       </div>
 
-      <div
-        className="album-cover-placeholder"
-        aria-label="Album cover placeholder"
-      />
+        <div className="album-link-cover">
+          {album.cover_path ? (
+            <img
+              className="album-cover"
+              src={`http://localhost:3000${album.cover_path}`}
+              alt={`${album.title} album cover`}
+            />
+          ) : (
+            <div
+              className="album-cover-placeholder"
+              aria-label="No album cover available"
+            />
+          )}
+        </div>
+
 
     </div>
   );

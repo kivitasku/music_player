@@ -28,6 +28,22 @@ export default function Player({
    
   return (
     <div className="player">
+
+      <div className="player-album-cover">
+        {song.albums?.cover_path ? (
+            <img
+              className="album-cover"
+              src={`http://localhost:3000${song.albums.cover_path}`}
+              alt={`${song.albums.title} album cover`}
+            />
+          ) : (
+            <div
+              className="album-cover-placeholder"
+              aria-label="No album cover available"
+            />
+        )}
+      </div>
+
       <div className="player-info">
         <h3>{song.title ?? "No song"}</h3>
 
