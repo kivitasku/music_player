@@ -5,6 +5,7 @@ import type { Artist as ArtistType } from "../types/Artist";
 import type { Song as SongType } from "../types/Song";
 
 import SearchResults from "./SearchResults";
+import AlbumLink from "./AlbumLink";
 import AlbumPage from "./AlbumPage";
 import ArtistPage from "./ArtistPage";
 import ArtistListPage from "./ArtistListPage";
@@ -16,6 +17,7 @@ interface MainProps {
   albums: AlbumType[];
   artists: ArtistType[];
   songs: SongType[];
+  recentAlbums: AlbumType[];
   onPlay: (song: SongType) => void;
   onImportMusic: () => void;
   searchQuery: string;
@@ -27,6 +29,7 @@ export default function Main({
   albums,
   artists,
   songs,
+  recentAlbums,
   onPlay,
   onImportMusic,
   searchQuery,
@@ -127,9 +130,18 @@ export default function Main({
           onSelectArtist={setSelectedArtistId}
         />
       ) : (
-        <div className="albums">
-          <p>wip</p>
-        </div>
+      <div className="albums">
+        <h2>Recently Played</h2>
+
+        {recentAlbums.map((album) => (
+          <AlbumLink
+            key={album.id}
+            album={album}
+            onClick={album => handleSelectAlbum(album.id)}
+            onSelectArtist={handleSelectArtist}
+          />
+        ))}
+      </div>
       )}
 
 

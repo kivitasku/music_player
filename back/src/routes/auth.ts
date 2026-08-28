@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import argon2 from "argon2";
 
 import { prisma } from "../lib/prisma.js";
+import { authenticate } from "../hooks/auth.js";
 
 export async function authRoutes(
   server: FastifyInstance
@@ -136,6 +137,12 @@ export async function authRoutes(
     select: {
       id: true,
       username: true,
+      songs: {
+        include: {
+          artists: true,
+          albums: true,
+        },
+      },
     },
   });
 
@@ -149,5 +156,44 @@ export async function authRoutes(
 
   return user;
 });
+
+
+
+server.get(
+  "/api/auth/recent-albums",
+  {
+    preHandler: authenticate,
+  },
+  async (request, reply) => {
+    const userId = request.session.get("userId");
+
+    if (userId === undefined) {
+      return reply.code(401).send({
+        error: "Not authenticated",
+      });
+    }
+
+    const recentAlbums =
+      await prisma.user_recent_albums.findMany({
+        where: {
+          user_id: userId,
+        },
+        orderBy: {
+          position: "asc",
+        },
+        include: {
+          albums: {
+            include: {
+              artists: true,
+            },
+          },
+        },
+      });
+
+    return recentAlbums.map((entry) => entry.albums);
+  }
+);
+
+
 
 }

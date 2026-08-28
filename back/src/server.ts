@@ -13,20 +13,12 @@ import { artistRoutes } from "./routes/artists.js";
 import { albumRoutes } from "./routes/albums.js";
 import { musicRoutes } from "./routes/music.js";
 import { authRoutes } from "./routes/auth.js";
+import { playbackRoutes } from "./routes/playback.js";
 
 const server = Fastify({
   logger: true
 });
 
-server.addHook("onRequest", async (request) => {
-  console.log("vittu");
-  console.log(
-    "Incoming:",
-    request.method,
-    request.url,
-    request.headers["content-type"]
-  );
-});
 
 server.register(fastifySecureSession, {
   key: fs.readFileSync(
@@ -73,6 +65,7 @@ server.register(songRoutes);
 server.register(artistRoutes);
 server.register(albumRoutes);
 server.register(musicRoutes);
+server.register(playbackRoutes);
 
 
 server.listen({ port: 3000 }, (err, address) => {
@@ -82,5 +75,4 @@ server.listen({ port: 3000 }, (err, address) => {
   }
 
   console.log(`Server running at ${address}`);
-  console.log("server.ts starttas")
 });
