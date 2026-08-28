@@ -3,11 +3,13 @@ import "./Player.css";
 
 interface PlayerProps {
   song: SongType | null;
+  autoPlay?: boolean;
   onSongEnded: () => void;
 }
 
 export default function Player({
   song,
+  autoPlay = true,
   onSongEnded,
 }: PlayerProps) {
   if (!song) {
@@ -30,7 +32,7 @@ export default function Player({
 
       <audio
         controls
-        autoPlay
+        autoPlay={autoPlay}
         src={`http://localhost:3000${song.file_path}`}
         onEnded={onSongEnded}
       />

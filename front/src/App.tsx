@@ -33,6 +33,8 @@ function App() {
 
   const [artists, setArtists] = useState<ArtistType[]>([]);
 
+  const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
+
 
   const [searchQuery, setSearchQuery] =
     useState("");
@@ -63,6 +65,7 @@ const loadCurrentUser = async () => {
 
     setLoggedIn(true);
     setCurrentSong(data.songs ?? null);
+    setShouldAutoPlay(false);
   } catch (error) {
     console.error("Authentication check failed:", error);
     setLoggedIn(false);
@@ -194,6 +197,7 @@ useEffect(() => {
 
 
 const handleSongEnded = async () => {
+  setShouldAutoPlay(true);
   if (!currentSong) {
     return;
   }
@@ -354,14 +358,17 @@ const handleLogout = async () => {
       recentAlbums={recentAlbums}
       artists={artists}
       songs={songs}
-      onPlay={setCurrentSong}
+      onPlay={(song) => {
+        setCurrentSong(song);
+        setShouldAutoPlay(true);
+      }}
       onImportMusic={handleImportMusic}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
       handleLogout={handleLogout}
     />
 
-    <Player song={currentSong} onSongEnded={handleSongEnded} />
+    <Player song={currentSong} onSongEnded={handleSongEnded} autoPlay={shouldAutoPlay} />
   </div>
 );
 }
