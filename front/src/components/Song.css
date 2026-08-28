@@ -1,0 +1,40 @@
+.song {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+}
+
+.play-button {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.song-info {
+  flex: 1;
+}
+
+.song-info h3,
+.song-info p {
+  margin: 0;
+}
+
+.song-info p {
+  margin-top: 4px;
+}
+
+.song-artist-link,
+.song-album-link {
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.song-artist-link:hover,
+.song-album-link:hover {
+  color: blue;
+}

@@ -1,0 +1,70 @@
+.album-page {
+  padding: 24px;
+}
+
+.album-back {
+  margin-bottom: 30px;
+
+  border: none;
+  background: none;
+
+  color: #ffffff;
+
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.album-page-header {
+  margin-bottom: 30px;
+}
+
+.album-page-header h1 {
+  margin: 0 0 8px;
+}
+
+.album-page-header p {
+  margin: 4px 0;
+  color: #b3b3b3;
+}
+
+.album-artist-link {
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.album-artist-link:hover {
+  opacity: 0.7;
+}
+
+.album-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.album-page-cover-placeholder {
+  flex-shrink: 0;
+
+  width: 180px;
+  height: 180px;
+
+  border-radius: 8px;
+
+  background: #383838;
+}
+
+.album-page-info {
+  min-width: 0;
+  text-align: center;
+}
+
+.album-page-info h1 {
+  margin: 0 0 10px;
+}
+
+.album-page-info p {
+  margin: 6px 0;
+}

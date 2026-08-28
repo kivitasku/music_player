@@ -1,0 +1,23 @@
+.artist-link {
+  padding: 16px;
+
+  border-radius: 8px;
+
+  background: #181818;
+  color: #ffffff;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+.artist-link:hover {
+  background: #282828;
+}
+
+.artist-link h3 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 600;
+}

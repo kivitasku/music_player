@@ -1,0 +1,40 @@
+.player {
+  position: fixed;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  padding: 12px 24px;
+  box-sizing: border-box;
+
+  background: #181818;
+  color: #ffffff;
+
+  border-top: 1px solid #282828;
+
+  z-index: 1200;
+}
+
+.player-info {
+  min-width: 220px;
+}
+
+.player-info h3 {
+  margin: 0 0 4px;
+}
+
+.player-info p {
+  margin: 2px 0;
+  color: #b3b3b3;
+}
+
+.player audio {
+  flex: 1;
+}

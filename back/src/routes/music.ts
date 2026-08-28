@@ -1,0 +1,23 @@
+import { FastifyInstance } from "fastify";
+import { importMusic } from "../../scripts/import-music.js";
+
+//Used to run the import script
+export async function musicRoutes(server: FastifyInstance) {
+  server.post("/api/music/import", async (_request, reply) => {
+    try {
+      const result = await importMusic();
+
+      return {
+        success: true,
+        ...result
+      };
+    } catch (error) {
+      server.log.error(error);
+
+      return reply.code(500).send({
+        success: false,
+        error: "Music import failed"
+      });
+    }
+  });
+}

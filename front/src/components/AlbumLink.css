@@ -1,0 +1,59 @@
+.album-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 100px;
+  padding: 16px;
+
+  border-radius: 8px;
+
+  background: #181818;
+  color: #ffffff;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+.album-link:hover {
+  background: #282828;
+}
+
+.album-link-info {
+  min-width: 0;
+}
+
+.album-link-info h3 {
+  margin: 0 0 6px;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.album-link-info p {
+  margin: 4px 0;
+}
+
+.album-artist-link {
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.album-artist-link:hover {
+  opacity: 0.7;
+}
+
+.album-cover-placeholder {
+  flex-shrink: 0;
+
+  width: 80px;
+  height: 80px;
+
+  margin-left: 20px;
+
+  border-radius: 4px;
+
+  background: #383838;
+}
