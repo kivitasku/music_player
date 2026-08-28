@@ -40,41 +40,40 @@ function App() {
   const [recentAlbums, setRecentAlbums] =
     useState<AlbumType[]>([]);
 
-//todo: fix the lastplayedsong loading error
-  useEffect(() => {
-    fetch("http://localhost:3000/api/auth/me", {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setLoggedIn(false);
-          return null;
-        }
 
-        return response.json();
-      })
-      .then((data) => {
-        if (!data) {
-          return;
-        }
 
-        setLoggedIn(true);
+const loadCurrentUser = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/auth/me",
+      {
+        credentials: "include",
+      }
+    );
 
-    if (data.songs) {
-      setCurrentSong(data.songs);
-    } else {
-      setCurrentSong(null);
+    if (!response.ok) {
+      setLoggedIn(false);
+      return;
     }
-      })
-      .catch((error) => {
-        console.error("Authentication check failed:", error);
-        setLoggedIn(false);
-      })
-      .finally(() => {
-        setAuthLoading(false);
-      });
-  }, []);
 
+    const data = await response.json();
+
+    console.log("Current user:", data);
+    console.log("Last played:", data.songs);
+
+    setLoggedIn(true);
+    setCurrentSong(data.songs ?? null);
+  } catch (error) {
+    console.error("Authentication check failed:", error);
+    setLoggedIn(false);
+  } finally {
+    setAuthLoading(false);
+  }
+};
+
+useEffect(() => {
+  loadCurrentUser();
+}, []);
 
 
 useEffect(() => {
@@ -338,7 +337,7 @@ const handleLogout = async () => {
   if (!loggedIn) {
   return (
       <LoginPage
-        onLogin={() => setLoggedIn(true)}
+        onLogin={loadCurrentUser}
       />
     );
   }
