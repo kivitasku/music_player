@@ -1,9 +1,11 @@
 import type { FastifyInstance } from "fastify";
 
 import { prisma } from "../lib/prisma.js";
+import { authenticate } from "../hooks/auth.js";
 
 export async function albumRoutes(server: FastifyInstance) {
   // Get all albums
+  server.addHook("preHandler", authenticate);
   server.get("/api/albums", async () => {
     return prisma.albums.findMany({
       include: {

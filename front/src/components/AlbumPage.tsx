@@ -23,7 +23,9 @@ export default function AlbumPage({
   const [fullAlbum, setFullAlbum] = useState<AlbumType | null>(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/albums/${album.id}`)
+    fetch(`http://localhost:3000/api/albums/${album.id}`,
+      {credentials: "include"}
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch album");

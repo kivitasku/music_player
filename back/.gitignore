@@ -5,3 +5,5 @@ node_modules/
 .agents/
 .windsurf/
 res/
+/secret-key
+rest_scripts/

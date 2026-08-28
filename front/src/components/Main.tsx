@@ -20,6 +20,7 @@ interface MainProps {
   onImportMusic: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  handleLogout: () => void;
 }
 
 export default function Main({
@@ -30,6 +31,7 @@ export default function Main({
   onImportMusic,
   searchQuery,
   setSearchQuery,
+  handleLogout,
 }: MainProps) {
   const [selectedAlbum, setSelectedAlbum] =
     useState<AlbumType | null>(null);
@@ -145,6 +147,8 @@ export default function Main({
     onHome={() => {
       resetView();
     }}
+    onLogout={handleLogout}
+    
   />
 
 

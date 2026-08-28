@@ -7,6 +7,7 @@ interface SideMenuProps {
   onImportMusic: () => void;
   onShowArtists: () => void;
   onHome: () => void;
+  onLogout: () => void;
 }
 
 export default function SideMenu({
@@ -16,6 +17,7 @@ export default function SideMenu({
   onImportMusic,
   onShowArtists,
   onHome,
+  onLogout,
 }: SideMenuProps) {
   return (
     <>
@@ -61,6 +63,13 @@ export default function SideMenu({
           onClick={onShowArtists}
         >
           Artists
+        </button>
+        
+        <button
+          className="menu-item"
+          onClick={onLogout}
+        >
+          Log out
         </button>
       </div>
     </>

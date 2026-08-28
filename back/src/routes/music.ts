@@ -1,8 +1,10 @@
 import { FastifyInstance } from "fastify";
 import { importMusic } from "../../scripts/import-music.js";
+import { authenticate } from "../hooks/auth.js";
 
 //Used to run the import script
 export async function musicRoutes(server: FastifyInstance) {
+  server.addHook("preHandler", authenticate);
   server.post("/api/music/import", async (_request, reply) => {
     try {
       const result = await importMusic();

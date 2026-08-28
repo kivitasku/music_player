@@ -1,8 +1,10 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
+import { authenticate } from "../hooks/auth.js";
 
 export async function songRoutes(server: FastifyInstance) {
   // Get all songs
+  server.addHook("preHandler", authenticate);
   server.get("/api/songs", async () => {
     const songs = await prisma.songs.findMany({
       include: {

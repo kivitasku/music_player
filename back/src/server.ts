@@ -1,17 +1,49 @@
 import "dotenv/config";
 
 import Fastify from "fastify";
+import fs from "node:fs";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
 import path from "node:path";
+
+import fastifySecureSession from "@fastify/secure-session";
 
 import { songRoutes } from "./routes/songs.js";
 import { artistRoutes } from "./routes/artists.js";
 import { albumRoutes } from "./routes/albums.js";
 import { musicRoutes } from "./routes/music.js";
+import { authRoutes } from "./routes/auth.js";
 
 const server = Fastify({
   logger: true
+});
+
+server.addHook("onRequest", async (request) => {
+  console.log("vittu");
+  console.log(
+    "Incoming:",
+    request.method,
+    request.url,
+    request.headers["content-type"]
+  );
+});
+
+server.register(fastifySecureSession, {
+  key: fs.readFileSync(
+    path.join(process.cwd(), "secret-key")
+  ),
+  cookie: {
+    path: "/",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  },
+});
+
+
+server.register(cors, {
+  origin: "http://localhost:5173",
+  credentials: true,
 });
 
 const musicDirectoryEnv = process.env.MUSIC_RES;
@@ -22,21 +54,26 @@ if (!musicDirectoryEnv) {
 
 const musicDirectory = path.resolve(musicDirectoryEnv);
 
-server.register(cors, {
-  origin: "http://localhost:5173"
-});
 
 server.register(fastifyStatic, {
-  root: path.resolve(musicDirectory),
+  root: musicDirectory,
   prefix: "/music/",
+
+  allowedPath: (_pathName, _root, request) => {
+    const userId = request.session.get("userId");
+
+    return userId !== undefined;
+  },
 });
 
 
 
+server.register(authRoutes);
 server.register(songRoutes);
 server.register(artistRoutes);
 server.register(albumRoutes);
 server.register(musicRoutes);
+
 
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {
@@ -45,4 +82,5 @@ server.listen({ port: 3000 }, (err, address) => {
   }
 
   console.log(`Server running at ${address}`);
+  console.log("server.ts starttas")
 });
