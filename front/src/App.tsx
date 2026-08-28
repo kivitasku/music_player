@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import "./App.css";
 
-import Player from "./components/Player";
 
 
 import Header from "./components/Header";
@@ -366,9 +365,12 @@ const handleLogout = async () => {
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
       handleLogout={handleLogout}
+      currentSong={currentSong}
+      onSongEnded={handleSongEnded}
+      autoPlay={shouldAutoPlay}
     />
 
-    <Player song={currentSong} onSongEnded={handleSongEnded} autoPlay={shouldAutoPlay} />
+    
   </div>
 );
 }

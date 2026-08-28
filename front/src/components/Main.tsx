@@ -12,6 +12,7 @@ import ArtistListPage from "./ArtistListPage";
 import SideMenu from "./SideMenu";
 
 import "./Main.css";
+import Player from "./Player";
 
 interface MainProps {
   albums: AlbumType[];
@@ -23,6 +24,9 @@ interface MainProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   handleLogout: () => void;
+  currentSong: SongType | null;
+  onSongEnded: () => void;
+  autoPlay: boolean;
 }
 
 export default function Main({
@@ -35,6 +39,9 @@ export default function Main({
   searchQuery,
   setSearchQuery,
   handleLogout,
+  currentSong,
+  onSongEnded,
+  autoPlay,
 }: MainProps) {
   const [selectedAlbum, setSelectedAlbum] =
     useState<AlbumType | null>(null);
@@ -165,7 +172,14 @@ export default function Main({
 
 
 
-
+    <Player 
+      song={currentSong} 
+      onSongEnded={onSongEnded} 
+      autoPlay={autoPlay} 
+      onSelectArtist={handleSelectArtist}
+      onSelectAlbum={handleSelectAlbum}
+      
+    />
 
     </main>
   );

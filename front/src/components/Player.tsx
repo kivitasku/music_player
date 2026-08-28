@@ -5,12 +5,16 @@ interface PlayerProps {
   song: SongType | null;
   autoPlay?: boolean;
   onSongEnded: () => void;
+  onSelectArtist: (artistId: number) => void;
+  onSelectAlbum: (albumId: number) => void;
 }
 
 export default function Player({
   song,
   autoPlay = true,
   onSongEnded,
+  onSelectArtist,
+  onSelectAlbum,
 }: PlayerProps) {
   if (!song) {
     return (
@@ -21,13 +25,34 @@ export default function Player({
       </div>
     );
   }
-
+   
   return (
     <div className="player">
       <div className="player-info">
         <h3>{song.title ?? "No song"}</h3>
-        <p>{song.artists.name ?? "No artist"}</p>
-        <p>{song.albums?.title ?? "No album"}</p>
+
+        <p
+          className="song-artist-link"
+          onClick={() => onSelectArtist(song.artists.id)}
+          role="button"
+          tabIndex={0}
+        >
+          {song.artists.name ?? "No artist"}
+        </p>
+
+
+        <p
+          className="song-album-link"
+          onClick={() => {
+            if (song.albums) {
+              onSelectAlbum(song.albums.id);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          {song.albums?.title ?? "No album"}
+        </p>
       </div>
 
       <audio
