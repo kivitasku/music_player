@@ -95,6 +95,7 @@ export default function AlbumPage({
             //missing onSelectAlbum
             //to be made into separate song component for album page
             onSelectArtist={onSelectArtist}
+            isAlbumPage={true}
           />
         ))}
       </div>

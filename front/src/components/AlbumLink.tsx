@@ -6,12 +6,14 @@ interface AlbumLinkProps {
   album: AlbumType;
   onClick: (album: AlbumType) => void;
   onSelectArtist: (artistId: number) => void;
+  isArtistPage?: boolean;
 }
 
 export default function AlbumLink({
   album,
   onClick,
   onSelectArtist,
+  isArtistPage = false,
 }: AlbumLinkProps) {
   return (
     <div
@@ -23,17 +25,22 @@ export default function AlbumLink({
       <div className="album-link-info">
         <h3>{album.title ?? "No album"}</h3>
 
-        <a
-          className="album-artist-link"
-          href="#"
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            onSelectArtist(album.artists.id);
-          }}
-        >
-          {album.artists?.name ?? "No artist"}
-        </a>
+        {!isArtistPage && (
+
+          <a
+            className="album-artist-link"
+            href="#"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onSelectArtist(album.artists.id);
+            }}
+          >
+            {album.artists?.name ?? "No artist"}
+          </a>
+
+        )}
+
 
         <p>{album.year ?? "Unknown year"}</p>
       </div>

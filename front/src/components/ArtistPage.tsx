@@ -72,6 +72,7 @@ export default function ArtistPage({
             key={album.id}
             album={album}
             onClick={onSelectAlbum}
+            isArtistPage={true}
           />
         ))}
       </div>

@@ -7,6 +7,7 @@ interface SongProps {
   onPlay: (song: SongType) => void;
   onSelectArtist: (artistId: number) => void;
   onSelectAlbum: (albumId: number) => void;
+  isAlbumPage?: boolean;
 }
 
 export default function Song({
@@ -14,6 +15,7 @@ export default function Song({
   onPlay,
   onSelectArtist,
   onSelectAlbum,
+  isAlbumPage = false,
 }: SongProps) {
   return (
     <div className="song">
@@ -28,27 +30,36 @@ export default function Song({
       <div className="song-info">
         <h3>{song.title ?? "No song"}</h3>
 
-        <p
-          className="song-artist-link"
-          onClick={() => onSelectArtist(song.artists.id)}
-          role="button"
-          tabIndex={0}
-        >
-          {song.artists.name ?? "No artist"}
-        </p>
 
-        <p
-          className="song-album-link"
-          onClick={() => {
-            if (song.albums) {
-              onSelectAlbum(song.albums.id);
-            }
-          }}
-          role="button"
-          tabIndex={0}
-        >
-          {song.albums?.title ?? "No album"}
-        </p>
+        {!isAlbumPage && (
+          <>
+
+            <p
+              className="song-artist-link"
+              onClick={() => onSelectArtist(song.artists.id)}
+              role="button"
+              tabIndex={0}
+            >
+              {song.artists.name ?? "No artist"}
+            </p>
+
+            <p
+              className="song-album-link"
+              onClick={() => {
+                if (song.albums) {
+                  onSelectAlbum(song.albums.id);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              {song.albums?.title ?? "No album"}
+            </p>
+        
+          </>
+        )}
+
+
       </div>
     </div>
   );
