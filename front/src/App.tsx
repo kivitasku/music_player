@@ -43,6 +43,8 @@ function App() {
   const [recentAlbums, setRecentAlbums] =
     useState<AlbumType[]>([]);
 
+  const [userName, setUserName] = useState("");
+
 
 
 const loadCurrentUser = async () => {
@@ -71,6 +73,8 @@ const loadCurrentUser = async () => {
 
     // User is logged in
     setLoggedIn(true);
+    setUserName(data.username);
+
 
     // Restore playback state
     setPlaybackAlbumId(data.playback_album_id ?? null);
@@ -438,6 +442,7 @@ const handleLogout = async () => {
       onSongEnded={handleSongEnded}
       autoPlay={shouldAutoPlay}
       onAddToQueue={handleAddToQueue}
+      userName={userName}
     />
 
     

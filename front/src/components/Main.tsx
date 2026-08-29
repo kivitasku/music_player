@@ -29,6 +29,7 @@ interface MainProps {
   onSongEnded: () => void;
   autoPlay: boolean;
   onAddToQueue: (song: SongType) => void;
+  userName: string;
 }
 
 export default function Main({
@@ -45,6 +46,7 @@ export default function Main({
   onSongEnded,
   autoPlay,
   onAddToQueue,
+  userName
 }: MainProps) {
   const [selectedAlbum, setSelectedAlbum] =
     useState<AlbumType | null>(null);
@@ -56,6 +58,8 @@ export default function Main({
       useState(false);
 
     const [menuOpen, setMenuOpen] = useState(false);
+
+    
 
     const filteredArtists = artists.filter((artist) =>
       artist.name
@@ -171,6 +175,7 @@ export default function Main({
         }}
         onLogout={handleLogout}
         menuOpen={menuOpen}
+        userName={userName}
 
       />
 

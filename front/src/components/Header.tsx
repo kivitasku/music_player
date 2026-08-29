@@ -11,6 +11,7 @@ interface HeaderProps {
   onOpen: () => void;
   onClose: () => void;
   menuOpen: boolean;
+  userName: string;
 }
 
 export default function Header({
@@ -22,11 +23,17 @@ export default function Header({
   onLogout,
   onOpen,
   onClose,
-  menuOpen
+  menuOpen,
+  userName
 }: HeaderProps) {
   return (
     <header className="header">
-      <h1>Music Player</h1>
+      <div className="name-area">
+        <h1>Music Player</h1>
+          <p> Hello, {userName}! </p>
+
+      </div>
+
 
       <input
         className="search-bar"
