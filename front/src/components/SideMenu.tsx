@@ -29,6 +29,13 @@ export default function SideMenu({
         ☰
       </button>
 
+      {isOpen && (
+        <div
+          className="side-menu-overlay"
+          onClick={onClose}
+        />
+      )}
+
       <div className={`side-menu ${isOpen ? "open" : ""}`}>
         <div className="side-menu-header">
           <h2>Menu</h2>
@@ -41,8 +48,6 @@ export default function SideMenu({
             ×
           </button>
         </div>
-
-
 
         <button
           className="menu-item"
@@ -57,7 +62,7 @@ export default function SideMenu({
         >
           Artists
         </button>
-        
+
         <button
           className="menu-item"
           onClick={onLogout}
@@ -71,7 +76,6 @@ export default function SideMenu({
         >
           Run admin cmd
         </button>
-
       </div>
     </>
   );
