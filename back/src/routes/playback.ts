@@ -4,6 +4,10 @@ import { prisma } from "../lib/prisma.js";
 
 import { authenticate } from "../hooks/auth.js";
 
+
+const MAX_RECENT_ALBUMS = 8;
+
+
 export async function playbackRoutes(
   server: FastifyInstance
 ) {
@@ -47,9 +51,9 @@ export async function playbackRoutes(
 
 
 const recentAlbums = await prisma.$transaction(async (tx) => {
-  // --------------------------------
+
+
   // 1. Save last played song
-  // --------------------------------
 
   await tx.users.update({
     where: {
@@ -65,9 +69,7 @@ const recentAlbums = await prisma.$transaction(async (tx) => {
     return [];
   }
 
-  // --------------------------------
   // 2. Get current recent albums
-  // --------------------------------
 
   const currentRecentAlbums =
     await tx.user_recent_albums.findMany({
@@ -79,17 +81,13 @@ const recentAlbums = await prisma.$transaction(async (tx) => {
       },
     });
 
-  // --------------------------------
   // 3. Remove the played album
-  // --------------------------------
 
   const remainingAlbums = currentRecentAlbums.filter(
     (album) => album.album_id !== song.album_id
   );
 
-  // --------------------------------
   // 4. Temporarily move everything
-  // --------------------------------
 
   for (let i = 0; i < currentRecentAlbums.length; i++) {
     await tx.user_recent_albums.update({
@@ -102,9 +100,7 @@ const recentAlbums = await prisma.$transaction(async (tx) => {
     });
   }
 
-  // --------------------------------
   // 5. Put played album at position 1
-  // --------------------------------
 
   const playedAlbum = currentRecentAlbums.find(
     (album) => album.album_id === song.album_id
@@ -129,11 +125,9 @@ const recentAlbums = await prisma.$transaction(async (tx) => {
     });
   }
 
-  // --------------------------------
   // 6. Put remaining albums at 2-8
-  // --------------------------------
 
-  const albumsToKeep = remainingAlbums.slice(0, 7);
+  const albumsToKeep = remainingAlbums.slice(0, MAX_RECENT_ALBUMS - 1);
 
   for (let i = 0; i < albumsToKeep.length; i++) {
     await tx.user_recent_albums.update({
@@ -146,22 +140,18 @@ const recentAlbums = await prisma.$transaction(async (tx) => {
     });
   }
 
-  // --------------------------------
   // 7. Delete albums outside the 8
-  // --------------------------------
 
   await tx.user_recent_albums.deleteMany({
     where: {
       user_id: userId,
       position: {
-        gt: 8,
+        gt: MAX_RECENT_ALBUMS,
       },
     },
   });
 
-  // --------------------------------
   // 8. Fetch the FINAL updated albums
-  // --------------------------------
 
   return tx.user_recent_albums.findMany({
     where: {
