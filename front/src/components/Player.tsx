@@ -1,5 +1,7 @@
+import { useState } from "react";
 import type { Song as SongType } from "../types/Song";
 import "./Player.css";
+import QueuePanel from "./QueuePanel";
 
 interface PlayerProps {
   song: SongType | null;
@@ -9,6 +11,7 @@ interface PlayerProps {
   onSelectAlbum: (albumId: number) => void;
 }
 
+
 export default function Player({
   song,
   autoPlay = true,
@@ -16,6 +19,9 @@ export default function Player({
   onSelectArtist,
   onSelectAlbum,
 }: PlayerProps) {
+
+  const [queueOpen, setQueueOpen] = useState(false);
+
   if (!song) {
     return (
       <div className="player">
@@ -77,6 +83,25 @@ export default function Player({
         src={`http://localhost:3000${song.file_path}`}
         onEnded={onSongEnded}
       />
+
+      
+      <div className="queue-settings-container">
+        <button
+          className="queue-button"
+          aria-label="Open queue"
+          onClick={() => setQueueOpen(true)}
+        >
+          ☰
+        </button>
+      </div>
+
+      <QueuePanel
+        isOpen={queueOpen}
+        onClose={() => setQueueOpen(false)}
+      />
+
+
+
     </div>
   );
 }

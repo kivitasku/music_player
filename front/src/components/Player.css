@@ -1,10 +1,8 @@
 .player {
   position: fixed;
-
   left: 0;
   right: 0;
   bottom: 0;
-
   height: 90px;
 
   display: flex;
@@ -16,33 +14,44 @@
 
   background: #181818;
   color: #ffffff;
-
   border-top: 1px solid #282828;
 
   z-index: 1200;
 }
 
 .player-info {
-  min-width: 220px;
+  min-width: 0;
+  width: 220px;
+  flex: 0 1 220px;
 }
 
 .player-info h3 {
   margin: 0 0 4px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .player-info p {
   margin: 2px 0;
+
   color: #b3b3b3;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .player audio {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .player-album-cover {
   width: 70px;
   height: 70px;
-  flex-shrink: 0;
+  flex: 0 0 70px;
 }
 
 .player-album-cover .album-cover,
@@ -55,4 +64,34 @@
 
 .player-album-cover .album-cover-placeholder {
   background: #333333;
+}
+
+.queue-settings-container {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.queue-button {
+  width: 36px;
+  height: 36px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+  color: #ffffff;
+
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.queue-button:hover {
+  background: #282828;
 }
