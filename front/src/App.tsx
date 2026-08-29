@@ -62,13 +62,32 @@ const loadCurrentUser = async () => {
     const data = await response.json();
 
     console.log("Current user:", data);
-    console.log("Last played:", data.songs);
+    console.log("Last played song:", data.songs);
+    console.log("Playback album:", data.playback_album_id);
+    console.log(
+      "Playback album song:",
+      data.playback_album_song_id
+    );
 
+    // User is logged in
     setLoggedIn(true);
+
+    // Restore playback state
+    setPlaybackAlbumId(data.playback_album_id ?? null);
+    setPlaybackAlbumSongId(
+      data.playback_album_song_id ?? null
+    );
+
+    // Restore the last played song
     setCurrentSong(data.songs ?? null);
+    // Don't automatically start playing after login
     setShouldAutoPlay(false);
+
   } catch (error) {
-    console.error("Authentication check failed:", error);
+    console.error(
+      "Authentication check failed:",
+      error
+    );
     setLoggedIn(false);
   } finally {
     setAuthLoading(false);
@@ -79,40 +98,40 @@ useEffect(() => {
   loadCurrentUser();
 }, []);
 
-
-useEffect(() => {
-  if (!loggedIn || !currentSong) {
-    return;
-  }
-
-  // This runs whenever loggedIn or currentSong changes
-  const updatePlayback = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/playback/${currentSong.id}`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update playback");
+const updatePlayback = async (
+  song: SongType,
+  fromQueue: boolean
+) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/playback/${song.id}`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fromQueue,
+        }),
       }
+    );
 
-      const data = await response.json();
-
-      setRecentAlbums(data.recentAlbums);
-    } catch (error) {
-      console.error(
-        "Failed to update playback state:",
-        error
-      );
+    if (!response.ok) {
+      throw new Error("Failed to update playback");
     }
-  };
 
-  updatePlayback();
-}, [loggedIn, currentSong]);
+    const data = await response.json();
+
+    setRecentAlbums(data.recentAlbums);
+  } catch (error) {
+    console.error(
+      "Failed to update playback:",
+      error
+    );
+  }
+};
+
 
 const handleAddToQueue = async (song: SongType) => {
   try {
@@ -164,9 +183,15 @@ const handleSongEnded = async () => {
     if (queueResponse.ok) {
       const nextSong = await queueResponse.json();
 
-      // Do NOT change playbackAlbumId here.
-      // The queue song is temporary playback.
+      /*
+       * Queue playback.
+       *
+       * Do NOT change playbackAlbumId or
+       * playbackAlbumSongId.
+       */
       setCurrentSong(nextSong);
+      await updatePlayback(nextSong, true);
+
       return;
     }
 
@@ -202,6 +227,8 @@ const handleSongEnded = async () => {
 
       setCurrentSong(nextAlbumSong);
       setPlaybackAlbumSongId(nextAlbumSong.id);
+
+      await updatePlayback(nextAlbumSong, false);
     } else {
       setCurrentSong(null);
     }
@@ -382,10 +409,7 @@ const handleLogout = async () => {
 
   return (
   <div className="app">
-    <Header
-      searchQuery={searchQuery}
-      onSearch={setSearchQuery}
-    />
+
 
     <Main
       albums={albums}
@@ -394,10 +418,17 @@ const handleLogout = async () => {
       songs={songs}
       onPlay={(song) => {
         setCurrentSong(song);
-        setShouldAutoPlay(true)
+        setShouldAutoPlay(true);
 
-        setPlaybackAlbumId(song.album_id);
-        setPlaybackAlbumSongId(song.id);
+        if (song.album_id !== null) {
+          setPlaybackAlbumId(song.album_id);
+          setPlaybackAlbumSongId(song.id);
+        } else {
+          setPlaybackAlbumId(null);
+          setPlaybackAlbumSongId(null);
+        }
+
+        updatePlayback(song, false);
       }}
       onImportMusic={handleImportMusic}
       searchQuery={searchQuery}

@@ -155,6 +155,9 @@ server.post(
     select: {
       id: true,
       username: true,
+      last_played_song_id: true,
+      playback_album_id: true,
+      playback_album_song_id: true,
       songs: {
         include: {
           artists: true,

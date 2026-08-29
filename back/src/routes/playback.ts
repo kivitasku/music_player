@@ -1,17 +1,19 @@
 import type { FastifyInstance } from "fastify";
 
 import { prisma } from "../lib/prisma.js";
-
 import { authenticate } from "../hooks/auth.js";
-
 
 const MAX_RECENT_ALBUMS = 8;
 
+interface PlaybackRequestBody {
+  fromQueue?: boolean;
+}
 
-export async function playbackRoutes(
-  server: FastifyInstance
-) {
-  server.post<{ Params: { songId: string } }>(
+export async function playbackRoutes(server: FastifyInstance) {
+  server.post<{
+    Params: { songId: string };
+    Body: PlaybackRequestBody;
+  }>(
     "/api/playback/:songId",
     {
       preHandler: authenticate,
@@ -33,6 +35,8 @@ export async function playbackRoutes(
         });
       }
 
+      const fromQueue = request.body?.fromQueue ?? false;
+
       const song = await prisma.songs.findUnique({
         where: {
           id: songId,
@@ -49,133 +53,163 @@ export async function playbackRoutes(
         });
       }
 
+      const recentAlbums = await prisma.$transaction(async (tx) => {
+        /*
+         * 1. Always save the song that is currently playing.
+         *
+         * This means queued songs also become last_played_song_id.
+         */
+        await tx.users.update({
+          where: {
+            id: userId,
+          },
+          data: {
+            last_played_song_id: song.id,
+          },
+        });
 
-const recentAlbums = await prisma.$transaction(async (tx) => {
+        /*
+         * 2. If this song came from the queue, DO NOT change
+         *    playback_album_id or playback_album_song_id.
+         *
+         * The album playback context must survive queued songs.
+         */
+        if (!fromQueue && song.album_id !== null) {
+          await tx.users.update({
+            where: {
+              id: userId,
+            },
+            data: {
+              playback_album_id: song.album_id,
+              playback_album_song_id: song.id,
+            },
+          });
+        }
 
+        /*
+         * A song doesn't have to belong to an album.
+         */
+        if (song.album_id === null) {
+          return [];
+        }
 
-  // 1. Save last played song
+        /*
+         * 3. Get current recent albums.
+         */
+        const currentRecentAlbums =
+          await tx.user_recent_albums.findMany({
+            where: {
+              user_id: userId,
+            },
+            orderBy: {
+              position: "asc",
+            },
+          });
 
-  await tx.users.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      last_played_song_id: song.id,
-    },
-  });
+        /*
+         * 4. Remove the played album from its old position.
+         */
+        const remainingAlbums = currentRecentAlbums.filter(
+          (album) => album.album_id !== song.album_id
+        );
 
-  // A song doesn't have to belong to an album
-  if (song.album_id === null) {
-    return [];
-  }
+        /*
+         * 5. Move everything temporarily so that position 1
+         *    can safely be assigned.
+         */
+        for (let i = 0; i < currentRecentAlbums.length; i++) {
+          await tx.user_recent_albums.update({
+            where: {
+              id: currentRecentAlbums[i].id,
+            },
+            data: {
+              position: 100 + i,
+            },
+          });
+        }
 
-  // 2. Get current recent albums
+        /*
+         * 6. Put the played album at position 1.
+         */
+        const playedAlbum = currentRecentAlbums.find(
+          (album) => album.album_id === song.album_id
+        );
 
-  const currentRecentAlbums =
-    await tx.user_recent_albums.findMany({
-      where: {
-        user_id: userId,
-      },
-      orderBy: {
-        position: "asc",
-      },
-    });
+        if (playedAlbum) {
+          await tx.user_recent_albums.update({
+            where: {
+              id: playedAlbum.id,
+            },
+            data: {
+              position: 1,
+            },
+          });
+        } else {
+          await tx.user_recent_albums.create({
+            data: {
+              user_id: userId,
+              album_id: song.album_id,
+              position: 1,
+            },
+          });
+        }
 
-  // 3. Remove the played album
+        /*
+         * 7. Put the remaining albums at positions 2-8.
+         */
+        const albumsToKeep = remainingAlbums.slice(
+          0,
+          MAX_RECENT_ALBUMS - 1
+        );
 
-  const remainingAlbums = currentRecentAlbums.filter(
-    (album) => album.album_id !== song.album_id
-  );
+        for (let i = 0; i < albumsToKeep.length; i++) {
+          await tx.user_recent_albums.update({
+            where: {
+              id: albumsToKeep[i].id,
+            },
+            data: {
+              position: i + 2,
+            },
+          });
+        }
 
-  // 4. Temporarily move everything
+        /*
+         * 8. Delete anything outside the maximum.
+         */
+        await tx.user_recent_albums.deleteMany({
+          where: {
+            user_id: userId,
+            position: {
+              gt: MAX_RECENT_ALBUMS,
+            },
+          },
+        });
 
-  for (let i = 0; i < currentRecentAlbums.length; i++) {
-    await tx.user_recent_albums.update({
-      where: {
-        id: currentRecentAlbums[i].id,
-      },
-      data: {
-        position: 100 + i,
-      },
-    });
-  }
+        /*
+         * 9. Return the final recent albums.
+         */
+        return tx.user_recent_albums.findMany({
+          where: {
+            user_id: userId,
+          },
+          orderBy: {
+            position: "asc",
+          },
+          include: {
+            albums: {
+              include: {
+                artists: true,
+              },
+            },
+          },
+        });
+      });
 
-  // 5. Put played album at position 1
-
-  const playedAlbum = currentRecentAlbums.find(
-    (album) => album.album_id === song.album_id
-  );
-
-  if (playedAlbum) {
-    await tx.user_recent_albums.update({
-      where: {
-        id: playedAlbum.id,
-      },
-      data: {
-        position: 1,
-      },
-    });
-  } else {
-    await tx.user_recent_albums.create({
-      data: {
-        user_id: userId,
-        album_id: song.album_id,
-        position: 1,
-      },
-    });
-  }
-
-  // 6. Put remaining albums at 2-8
-
-  const albumsToKeep = remainingAlbums.slice(0, MAX_RECENT_ALBUMS - 1);
-
-  for (let i = 0; i < albumsToKeep.length; i++) {
-    await tx.user_recent_albums.update({
-      where: {
-        id: albumsToKeep[i].id,
-      },
-      data: {
-        position: i + 2,
-      },
-    });
-  }
-
-  // 7. Delete albums outside the 8
-
-  await tx.user_recent_albums.deleteMany({
-    where: {
-      user_id: userId,
-      position: {
-        gt: MAX_RECENT_ALBUMS,
-      },
-    },
-  });
-
-  // 8. Fetch the FINAL updated albums
-
-  return tx.user_recent_albums.findMany({
-    where: {
-      user_id: userId,
-    },
-    orderBy: {
-      position: "asc",
-    },
-    include: {
-      albums: {
-        include: {
-          artists: true,
-        },
-      },
-    },
-  });
-});
-
-// Return the transaction result to the frontend
-return {
-  recentAlbums: recentAlbums.map(
-    (entry) => entry.albums
-  ),
-};
+      return {
+        recentAlbums: recentAlbums.map(
+          (entry) => entry.albums
+        ),
+      };
     }
   );
 }

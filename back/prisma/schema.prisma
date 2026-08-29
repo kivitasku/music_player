@@ -16,6 +16,7 @@ model albums {
   cover_path         String?              @db.VarChar(500)
   artists            artists              @relation(fields: [artist_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   songs              songs[]
+  user_playback      user_playback[]
   user_recent_albums user_recent_albums[]
 }
 
@@ -27,26 +28,30 @@ model artists {
 }
 
 model songs {
-  id         Int          @id @default(autoincrement())
-  title      String       @db.VarChar(255)
-  artist_id  Int
-  album_id   Int?
-  file_path  String
-  track_no   Int?
-  albums     albums?      @relation(fields: [album_id], references: [id], onUpdate: NoAction)
-  artists    artists      @relation(fields: [artist_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  user_queue user_queue[]
-  users      users[]
+  id            Int             @id @default(autoincrement())
+  title         String          @db.VarChar(255)
+  artist_id     Int
+  album_id      Int?
+  file_path     String
+  track_no      Int?
+  albums        albums?         @relation(fields: [album_id], references: [id], onUpdate: NoAction)
+  artists       artists         @relation(fields: [artist_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_playback user_playback[]
+  user_queue    user_queue[]
+  users         users[]
 }
 
 model users {
-  id                  Int                  @id @default(autoincrement())
-  username            String               @unique @db.VarChar(50)
-  password_hash       String
-  last_played_song_id Int?
-  user_queue          user_queue[]
-  user_recent_albums  user_recent_albums[]
-  songs               songs?               @relation(fields: [last_played_song_id], references: [id], onUpdate: NoAction)
+  id                     Int                  @id @default(autoincrement())
+  username               String               @unique @db.VarChar(50)
+  password_hash          String
+  last_played_song_id    Int?
+  playback_album_id      Int?
+  playback_album_song_id Int?
+  user_playback          user_playback?
+  user_queue             user_queue[]
+  user_recent_albums     user_recent_albums[]
+  songs                  songs?               @relation(fields: [last_played_song_id], references: [id], onUpdate: NoAction)
 }
 
 model user_queue {
@@ -72,4 +77,16 @@ model user_recent_albums {
   @@unique([user_id, album_id])
   @@unique([user_id, position])
   @@index([user_id, position])
+}
+
+model user_playback {
+  id       Int     @id @default(autoincrement())
+  user_id  Int     @unique
+  album_id Int?
+  song_id  Int?
+  albums   albums? @relation(fields: [album_id], references: [id], onUpdate: NoAction, map: "user_playback_album_fk")
+  songs    songs?  @relation(fields: [song_id], references: [id], onUpdate: NoAction, map: "user_playback_song_fk")
+  users    users   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_playback_user_fk")
+
+  @@index([user_id])
 }

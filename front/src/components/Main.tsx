@@ -13,6 +13,7 @@ import SideMenu from "./SideMenu";
 
 import "./Main.css";
 import Player from "./Player";
+import Header from "./Header";
 
 interface MainProps {
   albums: AlbumType[];
@@ -155,24 +156,26 @@ export default function Main({
       </div>
       )}
 
+      <Header
+        searchQuery={searchQuery}
+        onSearch={setSearchQuery}
+        onImportMusic={onImportMusic}
+        onOpen={() => setMenuOpen(true)}
+        onClose={() => setMenuOpen(false)}
+        onShowArtists={() => {
+          resetView();
+          setShowArtistList(true);
+        }}
+        onHome={() => {
+          resetView();
+        }}
+        onLogout={handleLogout}
+        menuOpen={menuOpen}
+
+      />
 
 
-        <SideMenu
-    isOpen={menuOpen}
-    onOpen={() => setMenuOpen(true)}
-    onClose={() => setMenuOpen(false)}
-    onImportMusic={onImportMusic}
-    onShowArtists={() => {
-      resetView();
-      setShowArtistList(true);
 
-    }}
-    onHome={() => {
-      resetView();
-    }}
-    onLogout={handleLogout}
-    
-  />
 
 
 

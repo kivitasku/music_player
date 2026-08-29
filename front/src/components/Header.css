@@ -24,17 +24,16 @@
 }
 
 .search-bar {
-  width: 320px;
+  flex: 1;
+  min-width: 0;
   padding: 10px 14px;
-
   border: none;
   border-radius: 20px;
-
   background: #282828;
   color: #ffffff;
-
   font-size: 15px;
   outline: none;
+  box-sizing: border-box;
 }
 
 .search-bar::placeholder {
@@ -43,4 +42,10 @@
 
 .search-bar:focus {
   background: #333333;
+}
+
+.side-menu-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
