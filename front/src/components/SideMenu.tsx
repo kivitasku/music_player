@@ -53,13 +53,6 @@ export default function SideMenu({
 
         <button
           className="menu-item"
-          onClick={onImportMusic}
-        >
-          Import Music
-        </button>
-
-        <button
-          className="menu-item"
           onClick={onShowArtists}
         >
           Artists
@@ -71,6 +64,14 @@ export default function SideMenu({
         >
           Log out
         </button>
+
+        <button
+          className="menu-item"
+          onClick={onImportMusic}
+        >
+          Run admin cmd
+        </button>
+
       </div>
     </>
   );

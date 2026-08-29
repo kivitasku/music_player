@@ -114,88 +114,6 @@ useEffect(() => {
   updatePlayback();
 }, [loggedIn, currentSong]);
 
-
-
-
-  useEffect(() => {
-    if (!loggedIn) {
-      return;
-    }
-
-    const fetchMusicData = async () => {
-      try {
-        const [
-          songsResponse,
-          albumsResponse,
-          artistsResponse,
-          recentAlbumsResponse,
-        ] = await Promise.all([
-          fetch("http://localhost:3000/api/songs", {
-            credentials: "include",
-          }),
-
-          fetch("http://localhost:3000/api/albums", {
-            credentials: "include",
-          }),
-
-          fetch("http://localhost:3000/api/artists", {
-            credentials: "include",
-          }),
-
-          fetch(
-            "http://localhost:3000/api/auth/recent-albums",
-            {
-              credentials: "include",
-            }
-          ),
-        ]);
-
-        if (!songsResponse.ok) {
-          throw new Error("Failed to fetch songs");
-        }
-
-        if (!albumsResponse.ok) {
-          throw new Error("Failed to fetch albums");
-        }
-
-        if (!artistsResponse.ok) {
-          throw new Error("Failed to fetch artists");
-        }
-
-        if (!recentAlbumsResponse.ok) {
-          throw new Error(
-            "Failed to fetch recent albums"
-          );
-        }
-
-        const [
-          songsData,
-          albumsData,
-          artistsData,
-          recentAlbumsData,
-        ] = await Promise.all([
-          songsResponse.json(),
-          albumsResponse.json(),
-          artistsResponse.json(),
-          recentAlbumsResponse.json(),
-        ]);
-
-        setSongs(songsData);
-        setAlbums(albumsData);
-        setArtists(artistsData);
-        setRecentAlbums(recentAlbumsData);
-      } catch (error) {
-        console.error(
-          "Error fetching music data:",
-          error
-        );
-      }
-    };
-
-    fetchMusicData();
-  }, [loggedIn]);
-
-
 const handleAddToQueue = async (song: SongType) => {
   try {
     const response = await fetch(
@@ -300,6 +218,87 @@ const handleSongEnded = async () => {
 
 
 
+useEffect(() => {
+  if (!loggedIn) {
+    return;
+  }
+
+    const fetchMusicData = async () => {
+      try {
+        const [
+          songsResponse,
+          albumsResponse,
+          artistsResponse,
+          recentAlbumsResponse,
+        ] = await Promise.all([
+          fetch("http://localhost:3000/api/songs", {
+            credentials: "include",
+          }),
+
+          fetch("http://localhost:3000/api/albums", {
+            credentials: "include",
+          }),
+
+          fetch("http://localhost:3000/api/artists", {
+            credentials: "include",
+          }),
+
+          fetch(
+            "http://localhost:3000/api/auth/recent-albums",
+            {
+              credentials: "include",
+            }
+          ),
+        ]);
+
+        if (!songsResponse.ok) {
+          throw new Error("Failed to fetch songs");
+        }
+
+        if (!albumsResponse.ok) {
+          throw new Error("Failed to fetch albums");
+        }
+
+        if (!artistsResponse.ok) {
+          throw new Error("Failed to fetch artists");
+        }
+
+        if (!recentAlbumsResponse.ok) {
+          throw new Error(
+            "Failed to fetch recent albums"
+          );
+        }
+
+        const [
+          songsData,
+          albumsData,
+          artistsData,
+          recentAlbumsData,
+        ] = await Promise.all([
+          songsResponse.json(),
+          albumsResponse.json(),
+          artistsResponse.json(),
+          recentAlbumsResponse.json(),
+        ]);
+
+        setSongs(songsData);
+        setAlbums(albumsData);
+        setArtists(artistsData);
+        setRecentAlbums(recentAlbumsData);
+      } catch (error) {
+        console.error(
+          "Error fetching music data:",
+          error
+        );
+      }
+    };
+
+    fetchMusicData();
+  }, [loggedIn]);
+
+
+
+
 const handleLogout = async () => {
   try {
     const response = await fetch(
@@ -322,7 +321,7 @@ const handleLogout = async () => {
 
   const handleImportMusic = async () => {
     try {
-            console.log("staring import");
+      console.log("staring import");
       const response = await fetch(
         "http://localhost:3000/api/music/import",
         {
