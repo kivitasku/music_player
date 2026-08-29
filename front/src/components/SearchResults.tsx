@@ -17,6 +17,7 @@ interface SearchResultsProps {
   onSelectArtist: (artistId: number) => void;
   onSelectAlbum: (albumId: number) => void;
   onPlay: (song: SongType) => void;
+  onAddToQueue: (song: SongType) => void;
 }
 
 export default function SearchResults({
@@ -26,6 +27,7 @@ export default function SearchResults({
   onSelectArtist,
   onSelectAlbum,
   onPlay,
+  onAddToQueue,
 }: SearchResultsProps) {
   return (
     <div className="search-results">
@@ -74,6 +76,7 @@ export default function SearchResults({
                 onPlay={onPlay}
                 onSelectArtist={onSelectArtist}
                 onSelectAlbum={onSelectAlbum}
+                onAddToQueue={onAddToQueue}
               />
             ))}
           </div>

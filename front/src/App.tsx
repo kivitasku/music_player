@@ -34,6 +34,8 @@ function App() {
 
   const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
 
+  const [playbackAlbumId, setPlaybackAlbumId] = useState<number | null>(null);
+  const [playbackAlbumSongId, setPlaybackAlbumSongId] = useState<number | null>(null);
 
   const [searchQuery, setSearchQuery] =
     useState("");
@@ -194,6 +196,35 @@ useEffect(() => {
   }, [loggedIn]);
 
 
+const handleAddToQueue = async (song: SongType) => {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/queue/add",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          songId: song.id,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Failed to add song to queue:", data.error);
+      return;
+    }
+
+    console.log("Added to queue:", data);
+  } catch (error) {
+    console.error("Error adding song to queue:", error);
+  }
+};
+
 
 const handleSongEnded = async () => {
   setShouldAutoPlay(true);
@@ -211,22 +242,25 @@ const handleSongEnded = async () => {
       }
     );
 
+
     if (queueResponse.ok) {
       const nextSong = await queueResponse.json();
 
+      // Do NOT change playbackAlbumId here.
+      // The queue song is temporary playback.
       setCurrentSong(nextSong);
       return;
     }
 
-    // Queue is empty, so find the next song
-    // in the current song's album.
-    if (!currentSong.album_id) {
+    // Queue is empty.
+    // Continue from the album we were originally playing.
+    if (!playbackAlbumId) {
       setCurrentSong(null);
       return;
     }
 
     const albumResponse = await fetch(
-      `http://localhost:3000/api/albums/${currentSong.album_id}`,
+      `http://localhost:3000/api/albums/${playbackAlbumId}`,
       {
         credentials: "include",
       }
@@ -239,16 +273,18 @@ const handleSongEnded = async () => {
     const album = await albumResponse.json();
 
     const currentIndex = album.songs.findIndex(
-      (song: SongType) => song.id === currentSong.id
+      (song: SongType) => song.id === playbackAlbumSongId
     );
 
     if (
       currentIndex !== -1 &&
       currentIndex + 1 < album.songs.length
     ) {
-      setCurrentSong(album.songs[currentIndex + 1]);
+      const nextAlbumSong = album.songs[currentIndex + 1];
+
+      setCurrentSong(nextAlbumSong);
+      setPlaybackAlbumSongId(nextAlbumSong.id);
     } else {
-      // No more songs in the album
       setCurrentSong(null);
     }
   } catch (error) {
@@ -359,7 +395,10 @@ const handleLogout = async () => {
       songs={songs}
       onPlay={(song) => {
         setCurrentSong(song);
-        setShouldAutoPlay(true);
+        setShouldAutoPlay(true)
+
+        setPlaybackAlbumId(song.album_id);
+        setPlaybackAlbumSongId(song.id);
       }}
       onImportMusic={handleImportMusic}
       searchQuery={searchQuery}
@@ -368,6 +407,7 @@ const handleLogout = async () => {
       currentSong={currentSong}
       onSongEnded={handleSongEnded}
       autoPlay={shouldAutoPlay}
+      onAddToQueue={handleAddToQueue}
     />
 
     

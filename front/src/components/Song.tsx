@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Song as SongType } from "../types/Song";
 
 import "./Song.css";
@@ -8,6 +9,7 @@ interface SongProps {
   onSelectArtist: (artistId: number) => void;
   onSelectAlbum?: (albumId: number) => void;
   isAlbumPage?: boolean;
+  onAddToQueue: (song: SongType) => void;
 }
 
 export default function Song({
@@ -16,7 +18,17 @@ export default function Song({
   onSelectArtist,
   onSelectAlbum = () => {},
   isAlbumPage = false,
+  onAddToQueue,
 }: SongProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  
+  const handleAddToQueue = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    onAddToQueue(song);
+    setMenuOpen(false);
+  };
+
+
   return (
     <div className="song">
       <button
@@ -61,6 +73,31 @@ export default function Song({
 
 
       </div>
+
+
+      <div className="song-settings">
+        <button
+          className="song-settings-button"
+          onClick={(event) => {
+            event.stopPropagation();
+            setMenuOpen(!menuOpen);
+          }}
+          aria-label="Song options"
+          aria-expanded={menuOpen}
+        >
+          ☰
+        </button>
+
+        {menuOpen && (
+          <div className="song-settings-menu">
+            <button onClick={handleAddToQueue}>
+              Add to queue
+            </button>
+          </div>
+        )}
+      </div>
+
+
     </div>
   );
 }

@@ -27,6 +27,7 @@ interface MainProps {
   currentSong: SongType | null;
   onSongEnded: () => void;
   autoPlay: boolean;
+  onAddToQueue: (song: SongType) => void;
 }
 
 export default function Main({
@@ -42,6 +43,7 @@ export default function Main({
   currentSong,
   onSongEnded,
   autoPlay,
+  onAddToQueue,
 }: MainProps) {
   const [selectedAlbum, setSelectedAlbum] =
     useState<AlbumType | null>(null);
@@ -114,6 +116,7 @@ export default function Main({
             onSelectArtist={handleSelectArtist}
             onSelectAlbum={handleSelectAlbum}
             onPlay={onPlay}
+            onAddToQueue={onAddToQueue}
         />
       ) : selectedArtistId ? (
         <ArtistPage
@@ -130,6 +133,7 @@ export default function Main({
           onBack={() => setSelectedAlbum(null)}
           onPlay={onPlay}
           onSelectArtist={setSelectedArtistId}
+          onAddToQueue={onAddToQueue}
         />
       ) : showArtistList ? (
         <ArtistListPage
