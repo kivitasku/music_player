@@ -4,12 +4,21 @@ import argon2 from "argon2";
 import { prisma } from "../lib/prisma.js";
 import { authenticate } from "../hooks/auth.js";
 
+
+const registerOpen = true; // Set to false to disable registration
+
 export async function authRoutes(
   server: FastifyInstance
 ) {
   //register
   server.post("/api/auth/register", async (request, reply) => {
     
+    if (!registerOpen) {
+      return reply.code(400).send({
+        error: "Registration is currently closed",
+      });
+    }
+
     console.log("Register request body:", request.body);
     const { username, password } = request.body as {
       username?: string;
@@ -114,11 +123,20 @@ export async function authRoutes(
 
 
   //logout
-  server.post("/api/auth/logout", async (request, reply) => {
-    request.session.delete();
-    return reply.send({ message: "Logged out successfully" });
-  });
+server.post(
+  "/api/auth/logout",
+  {
+    preHandler: authenticate,
+  },
+  async (request, reply) => {
+    await request.session.delete();
 
+    reply.send({ message: "Logged out successfully" });
+    return {
+      success: true,
+    };
+  }
+);
 
   //me endpoint to get the current logged-in user
   server.get("/api/auth/me", async (request, reply) => {
@@ -158,7 +176,7 @@ export async function authRoutes(
 });
 
 
-
+//recent-albums endpoint to get the recent albums for the current logged-in user
 server.get(
   "/api/auth/recent-albums",
   {
