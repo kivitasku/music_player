@@ -5,14 +5,14 @@ import "./AlbumLink.css";
 interface AlbumLinkProps {
   album: AlbumType;
   onClick: (album: AlbumType) => void;
-  onSelectArtist: (artistId: number) => void;
+  onSelectArtist?: (artistId: number) => void;
   isArtistPage?: boolean;
 }
 
 export default function AlbumLink({
   album,
   onClick,
-  onSelectArtist,
+  onSelectArtist = () => {},
   isArtistPage = false,
 }: AlbumLinkProps) {
   return (

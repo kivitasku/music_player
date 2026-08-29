@@ -100,7 +100,7 @@ export default function AlbumPage({
 
       <div className="album-songs">
         {fullAlbum.songs.map((song) => (
-          <Song
+          <Song 
             key={song.id}
             song={song}
             onPlay={onPlay}

@@ -6,7 +6,7 @@ interface SongProps {
   song: SongType;
   onPlay: (song: SongType) => void;
   onSelectArtist: (artistId: number) => void;
-  onSelectAlbum: (albumId: number) => void;
+  onSelectAlbum?: (albumId: number) => void;
   isAlbumPage?: boolean;
 }
 
@@ -14,7 +14,7 @@ export default function Song({
   song,
   onPlay,
   onSelectArtist,
-  onSelectAlbum,
+  onSelectAlbum = () => {},
   isAlbumPage = false,
 }: SongProps) {
   return (
