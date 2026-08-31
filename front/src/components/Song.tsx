@@ -93,6 +93,20 @@ export default function Song({
             <button onClick={handleAddToQueue}>
               Add to queue
             </button>
+            <button onClick={() => onSelectArtist(song.artists.id)}>
+              To artist
+            </button>
+            {!isAlbumPage && (
+              <button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onSelectAlbum(song.albums?.id ?? 0);
+                  setMenuOpen(false);
+                }}
+              >
+                Go to album
+              </button>
+            )}
           </div>
         )}
       </div>
