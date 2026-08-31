@@ -89,11 +89,16 @@ export default function Song({
         </button>
 
         {menuOpen && (
+          <>
+
           <div className="song-settings-menu">
             <button onClick={handleAddToQueue}>
               Add to queue
             </button>
-            <button onClick={() => onSelectArtist(song.artists.id)}>
+            <button onClick={() => {
+              onSelectArtist(song.artists.id);
+              setMenuOpen(false);
+            }}>
               To artist
             </button>
             {!isAlbumPage && (
@@ -108,8 +113,14 @@ export default function Song({
               </button>
             )}
           </div>
+                      <div
+              className="song-menu-overlay"
+              onClick={() => setMenuOpen(false)}
+            />
+          </>
         )}
       </div>
+      
 
 
     </div>
