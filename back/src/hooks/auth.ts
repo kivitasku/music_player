@@ -33,4 +33,6 @@ export async function authenticate(
       error: "User not found",
     });
   }
+
+  request.session.touch();
 }

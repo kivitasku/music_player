@@ -21,15 +21,19 @@ const server = Fastify({
 });
 
 
+const SESSION_MAX_AGE = 1 * 60; // 2 minutes
+
 server.register(fastifySecureSession, {
   key: fs.readFileSync(
     path.join(process.cwd(), "secret-key")
   ),
+  expiry: SESSION_MAX_AGE,
   cookie: {
     path: "/",
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
+    maxAge: SESSION_MAX_AGE,
   },
 });
 

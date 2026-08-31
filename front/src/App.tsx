@@ -46,7 +46,9 @@ function App() {
   const [userName, setUserName] = useState("");
 
 
-
+//todo: combine the timeout and loadCurrentUser,
+//timeout should activate current user to use setters
+//but currentUser shouldnt always set the eg. currentSong
 const loadCurrentUser = async () => {
   try {
     const response = await fetch(
@@ -101,6 +103,41 @@ const loadCurrentUser = async () => {
 useEffect(() => {
   loadCurrentUser();
 }, []);
+
+
+//timeout
+useEffect(() => {
+  if (!loggedIn) {
+    return;
+  }
+
+  const checkSession = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/auth/me",
+        {
+          credentials: "include",
+        }
+      );
+
+      if (response.status === 401) {
+        setLoggedIn(false);
+        setCurrentSong(null);
+        setShouldAutoPlay(false);
+      }
+    } catch (error) {
+      console.error("Session check failed:", error);
+    }
+  };
+
+  const interval = setInterval(checkSession, 30_000);
+
+  return () => clearInterval(interval);
+}, [loggedIn]);
+
+
+
+
 
 const updatePlayback = async (
   song: SongType,
@@ -350,6 +387,7 @@ const handleLogout = async () => {
   }
   };
 
+  //To be deleted
   const handleImportMusic = async () => {
     try {
       console.log("staring import");
