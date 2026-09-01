@@ -21,7 +21,7 @@ const server = Fastify({
 });
 
 
-const SESSION_MAX_AGE = 1 * 60; // 2 minutes
+const SESSION_MAX_AGE = 6 * 60 * 60; // 6 hours
 
 server.register(fastifySecureSession, {
   key: fs.readFileSync(
