@@ -14,6 +14,7 @@ import SideMenu from "./SideMenu";
 import "./Main.css";
 import Player from "./Player";
 import Header from "./Header";
+import SongMenu from "./SongMenu";
 
 interface MainProps {
   albums: AlbumType[];
@@ -57,7 +58,12 @@ export default function Main({
     const [showArtistList, setShowArtistList] =
       useState(false);
 
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [sideMenuOpen, setSideMenuOpen] = useState(false);
+
+    const [songMenuIsAlbumPage, setSongMenuIsAlbumPage] = useState(false);
+    const [songMenuOpen, setSongMenuOpen] = useState(false);
+    const [songMenuSong, setSongMenuSong] =
+      useState<SongType | null>(null);
 
     
 
@@ -101,12 +107,18 @@ export default function Main({
     
   };
 
+  const handleSongMenuOpen = (song: SongType, isAlbumPage: boolean) => {
+    setSongMenuSong(song);
+    setSongMenuIsAlbumPage(isAlbumPage);
+    setSongMenuOpen(true);
+  }
+
   function resetView()  {
     setSearchQuery("");
     setSelectedAlbum(null);
     setShowArtistList(false);
     setSelectedArtistId(null);
-    setMenuOpen(false);
+    setSideMenuOpen(false);
   }
 
     
@@ -122,6 +134,7 @@ export default function Main({
             onSelectAlbum={handleSelectAlbum}
             onPlay={onPlay}
             onAddToQueue={onAddToQueue}
+            onSongMenuOpen={handleSongMenuOpen}
         />
       ) : selectedArtistId ? (
         <ArtistPage
@@ -139,6 +152,7 @@ export default function Main({
           onPlay={onPlay}
           onSelectArtist={setSelectedArtistId}
           onAddToQueue={onAddToQueue}
+          onSongMenuOpen={handleSongMenuOpen}
         />
       ) : showArtistList ? (
         <ArtistListPage
@@ -164,8 +178,8 @@ export default function Main({
         searchQuery={searchQuery}
         onSearch={setSearchQuery}
         onImportMusic={onImportMusic}
-        onOpen={() => setMenuOpen(true)}
-        onClose={() => setMenuOpen(false)}
+        onOpen={() => setSideMenuOpen(true)}
+        onClose={() => setSideMenuOpen(false)}
         onShowArtists={() => {
           resetView();
           setShowArtistList(true);
@@ -174,12 +188,20 @@ export default function Main({
           resetView();
         }}
         onLogout={handleLogout}
-        menuOpen={menuOpen}
+        menuOpen={sideMenuOpen}
         userName={userName}
 
       />
 
-
+      <SongMenu
+        isOpen={songMenuOpen}
+        onOpen={() => setSongMenuOpen(true)}
+        onClose={() => setSongMenuOpen(false)}
+        song={songMenuSong}
+        isAlbumPage={songMenuIsAlbumPage}
+        onAddToQueue={onAddToQueue}
+        onSelectArtist={handleSelectArtist}
+      />
 
 
 

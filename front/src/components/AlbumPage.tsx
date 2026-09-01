@@ -13,6 +13,7 @@ interface AlbumPageProps {
   onPlay: (song: SongType) => void;
   onSelectArtist: (artistId: number) => void;
   onAddToQueue: (song: SongType) => void;
+  onSongMenuOpen: (song: SongType, isAlbumPage: boolean) => void;
 }
 
 export default function AlbumPage({
@@ -21,6 +22,7 @@ export default function AlbumPage({
   onPlay,
   onSelectArtist,
   onAddToQueue,
+  onSongMenuOpen,
 }: AlbumPageProps) {
   const [fullAlbum, setFullAlbum] = useState<AlbumType | null>(null);
 
@@ -106,11 +108,10 @@ export default function AlbumPage({
             key={song.id}
             song={song}
             onPlay={onPlay}
-            //missing onSelectAlbum
-            //to be made into separate song component for album page
             onSelectArtist={onSelectArtist}
             isAlbumPage={true}
             onAddToQueue={onAddToQueue}
+            onSongMenuOpen={onSongMenuOpen}
           />
         ))}
       </div>
