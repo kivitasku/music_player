@@ -14,6 +14,7 @@ export default function LoginPage({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const savedUsername = document.cookie
@@ -66,6 +67,7 @@ export default function LoginPage({
           "rememberedUsername=; max-age=0; path=/; SameSite=Lax";
       }
 
+      setShowPassword(false);
       onLogin();
     } catch (error) {
       console.error("Login error:", error);
@@ -100,15 +102,27 @@ export default function LoginPage({
 
         <div className="login-field">
           <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            autoComplete="current-password"
-            placeholder="Enter your password"
-            required
-          />
+
+          <div className="password-input-wrapper">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
+              placeholder="Enter your password"
+              required
+            />
+
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword((previous) => !previous)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? "| Hide" : "| Show"}
+            </button>
+          </div>
         </div>
 
         <div className="login-remember">

@@ -152,3 +152,34 @@
   cursor: pointer;
 }
 
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 60px;
+  box-sizing: border-box;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border: none;
+  background: none;
+  padding: 4px;
+
+  cursor: pointer;
+  font-size: 14px;
+
+    color: #aaa;
+}
+
+.password-toggle:hover {
+  color: #fff;
+}
+
