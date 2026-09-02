@@ -110,7 +110,6 @@ export default function AlbumPage({
             onPlay={onPlay}
             onSelectArtist={onSelectArtist}
             isAlbumPage={true}
-            onAddToQueue={onAddToQueue}
             onSongMenuOpen={onSongMenuOpen}
           />
         ))}
