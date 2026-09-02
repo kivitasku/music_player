@@ -3,17 +3,19 @@
   align-items: center;
   justify-content: space-between;
 
-  height: 140px;
-  padding: 16px;
+  height: 90px;
+  padding: 16px 16px;
+  gap: 12px;
+  background: #1e1e1e;
 
   border-radius: 8px;
 
-  background: #181818;
   color: #ffffff;
 
   cursor: pointer;
 
   transition: background 0.15s ease;
+  margin-bottom: 8px;
 }
 
 .album-link:hover {
