@@ -85,13 +85,16 @@ export default function SongMenu({
                   event.stopPropagation();
                   try {
                     if (!onSelectAlbum) {
+                      console.log("1");
                       onClose();
                       return;
                     }
                     if (!song) {
+                      console.log("2");
                       onClose();
                       return;
                     }
+                    console.log("Selecting album with ID:", song.albums?.id);
                   onSelectAlbum(song.albums?.id ?? 0);
                   onClose();
                   }

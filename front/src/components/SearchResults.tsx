@@ -78,8 +78,8 @@ export default function SearchResults({
                 onPlay={onPlay}
                 onSelectArtist={onSelectArtist}
                 onSelectAlbum={onSelectAlbum}
-                onAddToQueue={onAddToQueue}
                 onSongMenuOpen={onSongMenuOpen}
+                isSearchResult={true}
               />
             ))}
           </div>

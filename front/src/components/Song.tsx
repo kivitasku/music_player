@@ -25,24 +25,39 @@ export default function Song({
 
 
   return (
-    <div className="song">
-      <button
-        className="play-button"
+    <div className="song"
         onClick={() => onPlay(song)}
-        aria-label={`Play ${song.title}`}
-      >
-        ▶
-      </button>
+        >
+
+
+        {isSearchResult && (
+          <div className="song-album-cover">
+              {song.albums?.cover_path ? (
+                <img
+                  src={`http://localhost:3000${song.albums.cover_path}`}
+                  alt={`${song.albums.title} album cover`}
+                />
+              ) : (
+                <div className="song-album-cover-placeholder" />
+              )}
+            </div>
+
+        )}
 
       <div className="song-info">
         <h3>{song.title ?? "No song"}</h3>
 
-                {!isAlbumPage && (
-          <>
+
+
+          {!isAlbumPage && (
+          <div className="song-artist-album">
 
             <p
               className="song-artist-link"
-              onClick={() => onSelectArtist(song.artists.id)}
+              onClick={(event) => {
+                event.stopPropagation();
+                onSelectArtist(song.artists.id);
+              }}
               role="button"
               tabIndex={0}
             >
@@ -51,7 +66,8 @@ export default function Song({
 
             <p
               className="song-album-link"
-              onClick={() => {
+              onClick={(event) => {
+                event.stopPropagation();
                 if (song.albums) {
                   onSelectAlbum(song.albums.id);
                 }
@@ -62,7 +78,7 @@ export default function Song({
               {song.albums?.title ?? "No album"}
             </p>
         
-          </>
+          </div>
         )}
 
 
@@ -72,7 +88,10 @@ export default function Song({
       <div className="song-settings">
         <button
           className="song-settings-button"
-          onClick={() => onSongMenuOpen(song, isAlbumPage)}
+          onClick={(event) => {
+            event.stopPropagation();
+            onSongMenuOpen(song, isAlbumPage);
+          }}
         >
           ☰
         </button>

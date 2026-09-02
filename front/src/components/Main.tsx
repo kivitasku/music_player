@@ -201,6 +201,7 @@ export default function Main({
         isAlbumPage={songMenuIsAlbumPage}
         onAddToQueue={onAddToQueue}
         onSelectArtist={handleSelectArtist}
+        onSelectAlbum={handleSelectAlbum}
       />
 
 
