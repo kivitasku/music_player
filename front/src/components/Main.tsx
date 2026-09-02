@@ -153,6 +153,7 @@ export default function Main({
           onSelectArtist={setSelectedArtistId}
           onAddToQueue={onAddToQueue}
           onSongMenuOpen={handleSongMenuOpen}
+          currentSong={currentSong}
         />
       ) : showArtistList ? (
         <ArtistListPage

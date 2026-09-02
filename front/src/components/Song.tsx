@@ -10,6 +10,7 @@ interface SongProps {
   onSongMenuOpen: (song: SongType, isAlbumPage: boolean) => void;
   onSelectArtist: (artistId: number) => void;
   onSelectAlbum?: (albumId: number) => void;
+  currentSong: SongType | null;
 }
 
 export default function Song({
@@ -20,14 +21,18 @@ export default function Song({
   onSongMenuOpen,
   onSelectArtist,
   onSelectAlbum = () => {},
+  currentSong,
 }: SongProps) {
   
 
 
   return (
-    <div className="song"
+      <div
+        className={`song ${
+          isAlbumPage && song.id === currentSong?.id ? "song-current" : ""
+        }`}
         onClick={() => onPlay(song)}
-        >
+      >
 
 
         {isSearchResult && (

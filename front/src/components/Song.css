@@ -16,8 +16,16 @@
   margin-bottom: 8px;
 }
 
+.song-current {
+  background: #2c7523;
+}
+
 .song:hover {
   background: #282828;
+}
+
+.song-current:hover {
+  background: #0c5003;
 }
 
 .song-album-cover {
