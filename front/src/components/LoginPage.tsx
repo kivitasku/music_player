@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./LoginPage.css";
 
@@ -13,6 +13,19 @@ export default function LoginPage({
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  useEffect(() => {
+    const savedUsername = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("rememberedUsername="))
+      ?.split("=")[1];
+
+    if (savedUsername) {
+      setUsername(decodeURIComponent(savedUsername));
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -43,6 +56,14 @@ export default function LoginPage({
       if (!response.ok) {
         setError(data.error ?? "Login failed");
         return;
+      }
+
+      //remember username in cookie for 30 days if rememberMe is checked, otherwise delete the cookie
+      if (rememberMe) {
+        document.cookie = `rememberedUsername=${encodeURIComponent(username)}; max-age=2592000; path=/; SameSite=Lax`;
+      } else {
+        document.cookie =
+          "rememberedUsername=; max-age=0; path=/; SameSite=Lax";
       }
 
       onLogin();
@@ -88,6 +109,17 @@ export default function LoginPage({
             placeholder="Enter your password"
             required
           />
+        </div>
+
+        <div className="login-remember">
+          <label>
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(event) => setRememberMe(event.target.checked)}
+            />
+            Remember username
+          </label>
         </div>
 
         {error && (

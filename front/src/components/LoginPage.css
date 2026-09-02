@@ -137,3 +137,18 @@
   }
 }
 
+.login-remember {
+  margin: 12px 0;
+}
+
+.login-remember label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.login-remember input {
+  cursor: pointer;
+}
+
