@@ -22,7 +22,7 @@ interface MainProps {
   songs: SongType[];
   recentAlbums: AlbumType[];
   onPlay: (song: SongType) => void;
-  onImportMusic: () => void;
+  onImportMusic?: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   handleLogout: () => void;

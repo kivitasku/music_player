@@ -4,7 +4,7 @@ interface SideMenuProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  onImportMusic: () => void;
+  onImportMusic?: () => void;
   onShowArtists: () => void;
   onHome: () => void;
   onLogout: () => void;
@@ -70,12 +70,6 @@ export default function SideMenu({
           Log out
         </button>
 
-        <button
-          className="menu-item"
-          onClick={onImportMusic}
-        >
-          Run admin cmd
-        </button>
       </div>
     </>
   );

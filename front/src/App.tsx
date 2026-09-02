@@ -472,7 +472,6 @@ const handleLogout = async () => {
 
         updatePlayback(song, false);
       }}
-      onImportMusic={handleImportMusic}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
       handleLogout={handleLogout}

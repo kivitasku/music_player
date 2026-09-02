@@ -4,7 +4,7 @@ import SideMenu from "./SideMenu";
 interface HeaderProps {
   searchQuery: string;
   onSearch: (query: string) => void;
-  onImportMusic: () => void;
+  onImportMusic?: () => void;
   onShowArtists: () => void;
   onHome: () => void;
   onLogout: () => void;
