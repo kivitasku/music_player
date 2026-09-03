@@ -4,10 +4,7 @@ import "./App.css";
 
 
 
-import Header from "./components/Header";
-
-
-import Main from "./components/Main";
+import MainPage from "./components/MainPage";
 
 import LoginPage from "./components/LoginPage";
 
@@ -470,7 +467,7 @@ const handleLogout = async () => {
       <Notification message={notification} />
     )}
 
-    <Main
+    <MainPage
       albums={albums}
       recentAlbums={recentAlbums}
       artists={artists}

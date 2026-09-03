@@ -9,14 +9,13 @@ import AlbumLink from "./AlbumLink";
 import AlbumPage from "./AlbumPage";
 import ArtistPage from "./ArtistPage";
 import ArtistListPage from "./ArtistListPage";
-import SideMenu from "./SideMenu";
 
 import "./Main.css";
 import Player from "./Player";
 import Header from "./Header";
 import SongMenu from "./SongMenu";
 
-interface MainProps {
+interface MainPageProps {
   albums: AlbumType[];
   artists: ArtistType[];
   songs: SongType[];
@@ -33,7 +32,7 @@ interface MainProps {
   userName: string;
 }
 
-export default function Main({
+export default function MainPage({
   albums,
   artists,
   songs,
@@ -48,7 +47,7 @@ export default function Main({
   autoPlay,
   onAddToQueue,
   userName
-}: MainProps) {
+}: MainPageProps) {
   const [selectedAlbum, setSelectedAlbum] =
     useState<AlbumType | null>(null);
 

@@ -84,6 +84,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 
 ## To be added
 - Back end rate limiting
+- Range requests for streaming
 - User playlists
 
 
