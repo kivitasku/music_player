@@ -135,6 +135,7 @@ export default function Main({
             onPlay={onPlay}
             onAddToQueue={onAddToQueue}
             onSongMenuOpen={handleSongMenuOpen}
+            currentSong={currentSong}
         />
       ) : selectedArtistId ? (
         <ArtistPage

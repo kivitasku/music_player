@@ -19,6 +19,7 @@ interface SearchResultsProps {
   onPlay: (song: SongType) => void;
   onAddToQueue: (song: SongType) => void;
   onSongMenuOpen: (song: SongType, isAlbumPage: boolean) => void;
+  currentSong: SongType | null;
 }
 
 export default function SearchResults({
@@ -30,6 +31,7 @@ export default function SearchResults({
   onPlay,
   onAddToQueue,
   onSongMenuOpen,
+  currentSong,
 }: SearchResultsProps) {
   return (
     <div className="search-results">
@@ -80,6 +82,7 @@ export default function SearchResults({
                 onSelectAlbum={onSelectAlbum}
                 onSongMenuOpen={onSongMenuOpen}
                 isSearchResult={true}
+                currentSong={currentSong}
               />
             ))}
           </div>
