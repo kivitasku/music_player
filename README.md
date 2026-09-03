@@ -71,8 +71,10 @@ This project is made to be an easy to deploy self hosted web-based music streami
 - PostgreSQL
 
 ### Setting up
+- clone repo
 - npm install
 - npx prisma migrate deploy
+- rename: .env.example -> .env
 
 ### Configuration
 - Configuration is made in the env file
