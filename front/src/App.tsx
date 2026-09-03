@@ -75,6 +75,9 @@ const [loadingSongs, setLoadingSongs] = useState(false);
 //search query effect, triggers when searchQuery changes
 useEffect(() => {
   const query = searchQuery.trim();
+  setLoadingArtists(true);
+  setLoadingAlbums(true);
+  setLoadingSongs(true);
 
   if (!query) {
     setSearchResults({

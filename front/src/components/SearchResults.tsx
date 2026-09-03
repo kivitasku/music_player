@@ -56,7 +56,9 @@ export default function SearchResults({
       <h2>Search results</h2>
       <h3>Artists</h3>
 
-        {artists.length === 0 ? (
+        {loadingArtists ? (
+          <p>Loading...</p>
+        ) : artists.length === 0 ? (
           <p>No results found.</p>
         ) : (
           <>
@@ -82,7 +84,9 @@ export default function SearchResults({
         )}
 
       <h3>Albums</h3>
-        {albums.length === 0 ? (
+        {loadingAlbums ? (
+          <p>Loading...</p>
+        ) : albums.length === 0 ? (
           <p>No results found.</p>
         ) : (
           <>
@@ -109,7 +113,9 @@ export default function SearchResults({
         )}
 
       <h3>Songs</h3>
-        {songs.length === 0 ? (
+        {loadingSongs ? (
+          <p>Loading...</p>
+        ) : songs.length === 0 ? (
           <p>No songs found.</p>
         ) : (
           <>
