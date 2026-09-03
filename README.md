@@ -1,5 +1,5 @@
 # Project
-This project is made to be an easy to deploy self hosted web-based music streaming site.
+This project is made to be an easy to deploy self hosted web-based music streaming site with user authentication.
 
 
 ## Screenshots
@@ -23,10 +23,14 @@ This project is made to be an easy to deploy self hosted web-based music streami
 - Data import is currently run as a script with the user_id being 1 for authentication
 
 #### Import structure
-- /res/ (configured in env)
-- /res/album1/song1_file
-- /res/album1/cover_image_file
-
+/res/ (configured in env)
+├── album1/
+│   ├── song1_file
+│   ├── song2_file
+│   └── cover_image_file
+└── album2/
+    ├── song1_file
+    └── cover_image_file
 
 ### Supported file formats
 
@@ -37,10 +41,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 - jpg, jpeg, png, webp
 
 
-
 ## Technologies
-
-- Typescript
 
 ### Front
 
@@ -76,7 +77,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 
 
 ## Known limitations
-- "/" on song name corrupts the filepath
+- "/" on song filename corrupts the filepath
 - "[space]" on album directory name corrupts the album cover path
 
 ## To be added
