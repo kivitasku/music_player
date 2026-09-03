@@ -23,27 +23,29 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
 
-  const [songs, setSongs] = useState<SongType[]>([]);
-
   const [currentSong, setCurrentSong] =
     useState<SongType | null>(null);
 
-  const [albums, setAlbums] = useState<AlbumType[]>([]);
-
-  const [artists, setArtists] = useState<ArtistType[]>([]);
-
   const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
-
-  const [playbackAlbumId, setPlaybackAlbumId] = useState<number | null>(null);
-  const [playbackAlbumSongId, setPlaybackAlbumSongId] = useState<number | null>(null);
 
   const [searchQuery, setSearchQuery] =
     useState("");
 
+  //search results get info from these
+  const [albums, setAlbums] = useState<AlbumType[]>([]);
+  const [artists, setArtists] = useState<ArtistType[]>([]);
+  const [songs, setSongs] = useState<SongType[]>([]);
+  
+
+
+
+  //user related states
   const [recentAlbums, setRecentAlbums] =
     useState<AlbumType[]>([]);
-
   const [userName, setUserName] = useState("");
+  const [playbackAlbumId, setPlaybackAlbumId] = useState<number | null>(null);
+  const [playbackAlbumSongId, setPlaybackAlbumSongId] = useState<number | null>(null);
+
 
   const { 
     notification,
@@ -51,9 +53,7 @@ function App() {
   } = useNotification();
 
 
-//todo: combine the timeout and loadCurrentUser,
-//timeout should activate current user to use setters
-//but currentUser shouldnt always set the eg. currentSong
+//loads current user data from server if logged in
 const loadCurrentUser = async () => {
   try {
     const response = await fetch(
@@ -70,13 +70,6 @@ const loadCurrentUser = async () => {
 
     const data = await response.json();
 
-    console.log("Current user:", data);
-    console.log("Last played song:", data.songs);
-    console.log("Playback album:", data.playback_album_id);
-    console.log(
-      "Playback album song:",
-      data.playback_album_song_id
-    );
 
     // User is logged in
     setLoggedIn(true);
@@ -105,6 +98,7 @@ const loadCurrentUser = async () => {
   }
 };
 
+//run the loadCurrentUser when the app starts
 useEffect(() => {
   loadCurrentUser();
 }, []);
@@ -128,6 +122,10 @@ useEffect(() => {
         setLoggedIn(false);
         setCurrentSong(null);
         setShouldAutoPlay(false);
+        setUserName("");
+        setPlaybackAlbumId(null);
+        setPlaybackAlbumSongId(null);
+        setRecentAlbums([]);
       }
     } catch (error) {
       console.error("Session check failed:", error);
@@ -297,7 +295,7 @@ const handleSongEnded = async () => {
 
 
 
-// to be deleted
+// to be deleted, used to get all music data
 useEffect(() => {
   if (!loggedIn) {
     return;
