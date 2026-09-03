@@ -10,7 +10,7 @@ import AlbumPage from "./AlbumPage";
 import ArtistPage from "./ArtistPage";
 import ArtistListPage from "./ArtistListPage";
 
-import "./Main.css";
+import "./MainPage.css";
 import Player from "./Player";
 import Header from "./Header";
 import SongMenu from "./SongMenu";
