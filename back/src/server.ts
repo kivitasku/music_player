@@ -15,6 +15,7 @@ import { musicRoutes } from "./routes/music.js";
 import { authRoutes } from "./routes/auth.js";
 import { playbackRoutes } from "./routes/playback.js";
 import { queueRoutes } from "./routes/queue.js";
+import { searchRoutes } from "./routes/search.js";
 
 const server = Fastify({
   logger: true
@@ -74,6 +75,7 @@ server.register(albumRoutes);
 server.register(musicRoutes);
 server.register(playbackRoutes);
 server.register(queueRoutes);
+server.register(searchRoutes);
 
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {

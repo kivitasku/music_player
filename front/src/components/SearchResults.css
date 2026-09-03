@@ -1,0 +1,12 @@
+.show-more-button {
+    background-color: #425241;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.show-more-button:hover {
+    background-color: #0056b3;
+}

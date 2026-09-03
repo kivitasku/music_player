@@ -16,6 +16,7 @@ import type { Artist as ArtistType } from "./types/Artist";
 
 import { useNotification } from "./hooks/useNotification";
 import Notification from "./components/Notification";
+import { searchMusic } from "./api/search";
 
 
 function App() {
@@ -36,6 +37,24 @@ function App() {
   const [artists, setArtists] = useState<ArtistType[]>([]);
   const [songs, setSongs] = useState<SongType[]>([]);
   
+  //new search funtionality
+  const [searchResults, setSearchResults] = useState({
+    artists: [] as ArtistType[],
+    albums: [] as AlbumType[],
+    songs: [] as SongType[],
+  });
+
+const [artistOffset, setArtistOffset] = useState(0);
+const [albumOffset, setAlbumOffset] = useState(0);
+const [songOffset, setSongOffset] = useState(0);
+
+const [hasMoreArtists, setHasMoreArtists] = useState(true);
+const [hasMoreAlbums, setHasMoreAlbums] = useState(true);
+const [hasMoreSongs, setHasMoreSongs] = useState(true);
+
+const [loadingArtists, setLoadingArtists] = useState(false);
+const [loadingAlbums, setLoadingAlbums] = useState(false);
+const [loadingSongs, setLoadingSongs] = useState(false);
 
 
 
@@ -51,6 +70,143 @@ function App() {
     notification,
     showNotification,
   } = useNotification();
+
+
+//search query effect, triggers when searchQuery changes
+useEffect(() => {
+  const query = searchQuery.trim();
+
+  if (!query) {
+    setSearchResults({
+      artists: [],
+      albums: [],
+      songs: [],
+    });
+
+    setArtistOffset(0);
+    setAlbumOffset(0);
+    setSongOffset(0);
+
+    setHasMoreArtists(true);
+    setHasMoreAlbums(true);
+    setHasMoreSongs(true);
+
+    return;
+  }
+
+  const timeout = setTimeout(async () => {
+    try {
+      setLoadingArtists(true);
+      setLoadingAlbums(true);
+      setLoadingSongs(true);
+
+      const data = await searchMusic(query, 0, 5);
+
+      setSearchResults(data);
+
+      setArtistOffset(5);
+      setAlbumOffset(5);
+      setSongOffset(5);
+
+      setHasMoreArtists(data.hasMoreArtists);
+      setHasMoreAlbums(data.hasMoreAlbums);
+      setHasMoreSongs(data.hasMoreSongs);
+    } catch (error) {
+      console.error("Search failed:", error);
+    } finally {
+      setLoadingArtists(false);
+      setLoadingAlbums(false);
+      setLoadingSongs(false);
+    }
+  }, 300);
+
+  return () => clearTimeout(timeout);
+}, [searchQuery]);
+
+//handles showMore button click on artists
+const handleShowMoreArtists = async () => {
+  if (loadingArtists) return;
+
+  try {
+    setLoadingArtists(true);
+
+    const data = await searchMusic(
+      searchQuery.trim(),
+      artistOffset,
+      5,
+      "artists"
+    );
+
+    setSearchResults((previous) => ({
+      ...previous,
+      artists: [...previous.artists, ...data.artists],
+    }));
+
+    setArtistOffset((previous) => previous + 5);
+    setHasMoreArtists(data.hasMoreArtists);
+  } catch (error) {
+    console.error("Failed to load more artists:", error);
+  } finally {
+    setLoadingArtists(false);
+  }
+};
+
+//handles showMore button click on albums
+const handleShowMoreAlbums = async () => {
+  if (loadingAlbums) return;
+
+  try {
+    setLoadingAlbums(true);
+
+    const data = await searchMusic(
+      searchQuery.trim(),
+      albumOffset,
+      5,
+      "albums"
+    );
+
+    setSearchResults((previous) => ({
+      ...previous,
+      albums: [...previous.albums, ...data.albums],
+    }));
+
+    setAlbumOffset((previous) => previous + 5);
+    setHasMoreAlbums(data.hasMoreAlbums);
+  } catch (error) {
+    console.error("Failed to load more albums:", error);
+  } finally {
+    setLoadingAlbums(false);
+  }
+};
+
+//handles showMore button click on songs
+const handleShowMoreSongs = async () => {
+  if (loadingSongs) return;
+
+  try {
+    setLoadingSongs(true);
+
+    const data = await searchMusic(
+      searchQuery.trim(),
+      songOffset,
+      5,
+      "songs"
+    );
+
+    setSearchResults((previous) => ({
+      ...previous,
+      songs: [...previous.songs, ...data.songs],
+    }));
+
+    setSongOffset((previous) => previous + 5);
+    setHasMoreSongs(data.hasMoreSongs);
+  } catch (error) {
+    console.error("Failed to load more songs:", error);
+  } finally {
+    setLoadingSongs(false);
+  }
+};
+
 
 
 //loads current user data from server if logged in
@@ -102,6 +258,38 @@ const loadCurrentUser = async () => {
 useEffect(() => {
   loadCurrentUser();
 }, []);
+
+//fetch all artists
+useEffect(() => {
+  if (!loggedIn) {
+    return;
+  }
+
+  const fetchArtists = async () => {
+    try {
+      const response = await fetch(
+        "/api/artists",
+        {
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch artists");
+      }
+
+      const data = await response.json();
+      setArtists(data);
+    } catch (error) {
+      console.error(
+        "Error fetching artists:",
+        error
+      );
+    }
+  };
+
+  fetchArtists();
+}, [loggedIn]);
 
 
 //timeout
@@ -420,10 +608,10 @@ const handleLogout = async () => {
     )}
 
     <MainPage
-      albums={albums}
+      albums={searchResults.albums}
       recentAlbums={recentAlbums}
-      artists={artists}
-      songs={songs}
+      artists={searchResults.artists}
+      songs={searchResults.songs}
       onPlay={(song) => {
         setCurrentSong(song);
         setShouldAutoPlay(true);
@@ -446,6 +634,16 @@ const handleLogout = async () => {
       autoPlay={shouldAutoPlay}
       onAddToQueue={handleAddToQueue}
       userName={userName}
+      onShowMoreArtists={handleShowMoreArtists}
+      onShowMoreAlbums={handleShowMoreAlbums}
+      onShowMoreSongs={handleShowMoreSongs}
+      hasMoreArtists={hasMoreArtists}
+      hasMoreAlbums={hasMoreAlbums}
+      hasMoreSongs={hasMoreSongs}
+      loadingArtists={loadingArtists}
+      loadingAlbums={loadingAlbums}
+      loadingSongs={loadingSongs}
+      allArtists={artists}
     />
 
     

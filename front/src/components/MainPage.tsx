@@ -18,6 +18,7 @@ import SongMenu from "./SongMenu";
 interface MainPageProps {
   albums: AlbumType[];
   artists: ArtistType[];
+  allArtists: ArtistType[];
   songs: SongType[];
   recentAlbums: AlbumType[];
   onPlay: (song: SongType) => void;
@@ -30,6 +31,18 @@ interface MainPageProps {
   autoPlay: boolean;
   onAddToQueue: (song: SongType) => void;
   userName: string;
+  
+  onShowMoreArtists: () => void;
+  onShowMoreAlbums: () => void;
+  onShowMoreSongs: () => void;
+
+  hasMoreArtists: boolean;
+  hasMoreAlbums: boolean;
+  hasMoreSongs: boolean;
+
+  loadingArtists: boolean;
+  loadingAlbums: boolean;
+  loadingSongs: boolean;
 }
 
 export default function MainPage({
@@ -46,7 +59,17 @@ export default function MainPage({
   onSongEnded,
   autoPlay,
   onAddToQueue,
-  userName
+  userName,
+  onShowMoreArtists,
+  onShowMoreAlbums,
+  onShowMoreSongs,
+  hasMoreArtists,
+  hasMoreAlbums,
+  hasMoreSongs,
+  loadingArtists,
+  loadingAlbums,
+  loadingSongs,
+  allArtists,
 }: MainPageProps) {
   const [selectedAlbum, setSelectedAlbum] =
     useState<AlbumType | null>(null);
@@ -132,9 +155,17 @@ export default function MainPage({
             onSelectArtist={handleSelectArtist}
             onSelectAlbum={handleSelectAlbum}
             onPlay={onPlay}
-            onAddToQueue={onAddToQueue}
             onSongMenuOpen={handleSongMenuOpen}
             currentSong={currentSong}
+            onShowMoreArtists={onShowMoreArtists}
+            onShowMoreAlbums={onShowMoreAlbums}
+            onShowMoreSongs={onShowMoreSongs}
+            hasMoreArtists={hasMoreArtists}
+            hasMoreAlbums={hasMoreAlbums}
+            hasMoreSongs={hasMoreSongs}
+            loadingArtists={loadingArtists}
+            loadingAlbums={loadingAlbums}
+            loadingSongs={loadingSongs}
         />
       ) : selectedArtistId ? (
         <ArtistPage
@@ -157,7 +188,7 @@ export default function MainPage({
         />
       ) : showArtistList ? (
         <ArtistListPage
-          artists={artists}
+          artists={allArtists}
           onSelectArtist={setSelectedArtistId}
         />
       ) : (

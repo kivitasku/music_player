@@ -18,6 +18,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 
 
 ## Technical features
+- Back end offset searching
 
 ### Data import
 - Data import is currently run as a script with the user_id being 1 for authentication
