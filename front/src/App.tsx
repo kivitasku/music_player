@@ -60,7 +60,7 @@ function App() {
 const loadCurrentUser = async () => {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/auth/me",
+      "/api/auth/me",
       {
         credentials: "include",
       }
@@ -118,11 +118,10 @@ useEffect(() => {
   if (!loggedIn) {
     return;
   }
-
   const checkSession = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/me",
+        "/api/auth/me",
         {
           credentials: "include",
         }
@@ -138,7 +137,7 @@ useEffect(() => {
     }
   };
 
-  const interval = setInterval(checkSession, 30_000);
+  const interval = setInterval(checkSession, 30_000); // 30 seconds
 
   return () => clearInterval(interval);
 }, [loggedIn]);
@@ -153,7 +152,7 @@ const updatePlayback = async (
 ) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/playback/${song.id}`,
+      `/api/playback/${song.id}`,
       {
         method: "POST",
         credentials: "include",
@@ -185,7 +184,7 @@ const updatePlayback = async (
 const handleAddToQueue = async (song: SongType) => {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/queue/add",
+      "/api/queue/add",
       {
         method: "POST",
         credentials: "include",
@@ -227,7 +226,7 @@ const handleSongEnded = async () => {
   try {
     // First try to get the next song from the user's queue
     const queueResponse = await fetch(
-      "http://localhost:3000/api/queue/next",
+      "/api/queue/next",
       {
         method: "POST",
         credentials: "include",
@@ -258,7 +257,7 @@ const handleSongEnded = async () => {
     }
 
     const albumResponse = await fetch(
-      `http://localhost:3000/api/albums/${playbackAlbumId}`,
+      `/api/albums/${playbackAlbumId}`,
       {
         credentials: "include",
       }
@@ -313,20 +312,20 @@ useEffect(() => {
           artistsResponse,
           recentAlbumsResponse,
         ] = await Promise.all([
-          fetch("http://localhost:3000/api/songs", {
+          fetch("/api/songs", {
             credentials: "include",
           }),
 
-          fetch("http://localhost:3000/api/albums", {
+          fetch("/api/albums", {
             credentials: "include",
           }),
 
-          fetch("http://localhost:3000/api/artists", {
+          fetch("/api/artists", {
             credentials: "include",
           }),
 
           fetch(
-            "http://localhost:3000/api/auth/recent-albums",
+            "/api/auth/recent-albums",
             {
               credentials: "include",
             }
@@ -384,7 +383,7 @@ useEffect(() => {
 const handleLogout = async () => {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/auth/logout",
+      "/api/auth/logout",
       {
         method: "POST",
         credentials: "include",
@@ -406,7 +405,7 @@ const handleLogout = async () => {
     try {
       console.log("staring import");
       const response = await fetch(
-        "http://localhost:3000/api/music/import",
+        "/api/music/import",
         {
           method: "POST",
           credentials: "include",
@@ -432,7 +431,7 @@ const handleLogout = async () => {
 
       // Fetch the songs again after importing
       const songsResponse = await fetch(
-        "http://localhost:3000/api/songs",
+        "/api/songs",
         {
           credentials: "include",
         }
@@ -451,6 +450,7 @@ const handleLogout = async () => {
   };
 
 
+  //web page
   if (authLoading) {
     return <div>Loading...</div>;
   }
