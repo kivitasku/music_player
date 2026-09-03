@@ -39,7 +39,7 @@ export default function Player({
         {song.albums?.cover_path ? (
             <img
               className="album-cover"
-              src={`http://localhost:3000${song.albums.cover_path}`}
+              src={song.albums.cover_path}
               alt={`${song.albums.title} album cover`}
             />
           ) : (
@@ -80,7 +80,7 @@ export default function Player({
       <audio
         controls
         autoPlay={autoPlay}
-        src={`http://localhost:3000${song.file_path}`}
+        src={song.file_path}
         onEnded={onSongEnded}
       />
 

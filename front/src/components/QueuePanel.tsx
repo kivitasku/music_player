@@ -30,7 +30,7 @@ export default function QueuePanel({
 
       try {
         const response = await fetch(
-          "http://localhost:3000/api/queue",
+          "/api/queue",
           {
             credentials: "include",
           }
@@ -55,7 +55,7 @@ export default function QueuePanel({
 const handleRemove = async (queueId: number) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/queue/${queueId}`,
+      `/api/queue/${queueId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -110,7 +110,7 @@ const handleRemove = async (queueId: number) => {
                 {item.songs.albums?.cover_path ? (
                     <img
                         className="queue-song-cover"
-                        src={`http://localhost:3000${item.songs.albums.cover_path}`}
+                        src={item.songs.albums.cover_path}
                         alt={`${item.songs.albums.title} album cover`}
                     />
                     ) : (

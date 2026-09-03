@@ -21,7 +21,7 @@ export default function ArtistPage({
   const [artist, setArtist] = useState<ArtistType | null>(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/artists/${artistId}`,
+    fetch(`/api/artists/${artistId}`,
       {credentials: "include"})
       .then((response) => {
         if (!response.ok) {

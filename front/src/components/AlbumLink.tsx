@@ -50,7 +50,7 @@ export default function AlbumLink({
           {album.cover_path ? (
             <img
               className="album-cover"
-              src={`http://localhost:3000${album.cover_path}`}
+              src={album.cover_path}
               alt={`${album.title} album cover`}
             />
           ) : (

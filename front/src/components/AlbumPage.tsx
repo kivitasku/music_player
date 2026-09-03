@@ -29,7 +29,7 @@ export default function AlbumPage({
   const [fullAlbum, setFullAlbum] = useState<AlbumType | null>(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/albums/${album.id}`,
+    fetch(`/api/albums/${album.id}`,
       {credentials: "include"}
     )
       .then((response) => {
@@ -77,7 +77,7 @@ export default function AlbumPage({
             {album.cover_path ? (
               <img
                 className="album-cover"
-                src={`http://localhost:3000${album.cover_path}`}
+                src={album.cover_path}
                 alt={`${album.title} album cover`}
               />
             ) : (

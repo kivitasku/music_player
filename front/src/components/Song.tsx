@@ -39,7 +39,7 @@ export default function Song({
           <div className="song-album-cover">
               {song.albums?.cover_path ? (
                 <img
-                  src={`http://localhost:3000${song.albums.cover_path}`}
+                  src={song.albums.cover_path}
                   alt={`${song.albums.title} album cover`}
                 />
               ) : (
