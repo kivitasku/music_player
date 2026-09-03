@@ -142,7 +142,8 @@ useEffect(() => {
 
 
 
-
+//handles the playback state update on the server side, and updates the recent albums
+//and currently playing album
 const updatePlayback = async (
   song: SongType,
   fromQueue: boolean
@@ -177,7 +178,7 @@ const updatePlayback = async (
   }
 };
 
-
+//handle add to queue button call
 const handleAddToQueue = async (song: SongType) => {
   try {
     const response = await fetch(
@@ -214,6 +215,7 @@ const handleAddToQueue = async (song: SongType) => {
 };
 
 
+//handle song ended event
 const handleSongEnded = async () => {
   setShouldAutoPlay(true);
   if (!currentSong) {
@@ -295,7 +297,7 @@ const handleSongEnded = async () => {
 
 
 
-
+// to be deleted
 useEffect(() => {
   if (!loggedIn) {
     return;
@@ -376,7 +378,7 @@ useEffect(() => {
 
 
 
-
+//handle logout button call
 const handleLogout = async () => {
   try {
     const response = await fetch(
@@ -395,56 +397,8 @@ const handleLogout = async () => {
   } catch (error) {
     console.error("Logout error:", error);
   }
-  };
+};
 
-  //To be deleted
-  const handleImportMusic = async () => {
-    try {
-      console.log("staring import");
-      const response = await fetch(
-        "/api/music/import",
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
-
-
-      if (!response.ok) {
-        throw new Error("Music import failed");
-      }
-
-      const result = await response.json();
-
-      console.log("Import result:", result);
-
-      alert(
-      `Import complete!\n\n` +
-      `Found: ${result.found}\n` +
-      `Imported: ${result.imported}\n` +
-      `Skipped: ${result.skipped}\n` +
-      `Failed: ${result.failed}`
-    );
-
-      // Fetch the songs again after importing
-      const songsResponse = await fetch(
-        "/api/songs",
-        {
-          credentials: "include",
-        }
-      );
-
-      if (!songsResponse.ok) {
-        throw new Error("Failed to refresh songs");
-      }
-
-      const updatedSongs = await songsResponse.json();
-
-      setSongs(updatedSongs);
-    } catch (error) {
-      console.error("Error importing music:", error);
-    }
-  };
 
 
   //web page
