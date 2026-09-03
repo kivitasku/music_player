@@ -23,6 +23,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 - Data import is currently run as a script with the user_id being 1 for authentication
 
 #### Import structure
+```bash
 /res/ (configured in env)
 ├── album1/
 │   ├── song1_file
@@ -31,6 +32,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 └── album2/
     ├── song1_file
     └── cover_image_file
+```
 
 ### Supported file formats
 
