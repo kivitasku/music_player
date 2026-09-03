@@ -76,6 +76,10 @@ This project is made to be an easy to deploy self hosted web-based music streami
 
 ### Configuration
 - Configuration is made in the env file
+- MAX_QUEUE_SIZE=5
+- MAX_RECENT_ALBUMS=8
+- REGISTER_OPEN=true
+- SESSION_MAX_AGE=21600 (6 hours: 6*60*60=21600)
 
 ### Running
 

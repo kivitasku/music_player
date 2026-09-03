@@ -3,7 +3,7 @@ import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { authenticate } from "../hooks/auth.js";
 
-const MAX_QUEUE_SIZE = 5;
+const MAX_QUEUE_SIZE = parseInt(process.env.MAX_QUEUE_SIZE || "5");
 
 export async function queueRoutes(server: FastifyInstance) {
   // Add a song to the current user's queue

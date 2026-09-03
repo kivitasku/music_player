@@ -3,7 +3,7 @@ import type { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { authenticate } from "../hooks/auth.js";
 
-const MAX_RECENT_ALBUMS = 8;
+const MAX_RECENT_ALBUMS = parseInt(process.env.MAX_RECENT_ALBUMS || "8");
 
 interface PlaybackRequestBody {
   fromQueue?: boolean;

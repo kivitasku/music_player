@@ -20,8 +20,9 @@ const server = Fastify({
   logger: true
 });
 
-
-const SESSION_MAX_AGE = 6 * 60 * 60; // 6 hours
+const SESSION_MAX_AGE = process.env.SESSION_MAX_AGE
+  ? parseInt(process.env.SESSION_MAX_AGE, 10)
+  : 6 * 60 * 60; // Default to 6 hours if not set
 
 server.register(fastifySecureSession, {
   key: fs.readFileSync(

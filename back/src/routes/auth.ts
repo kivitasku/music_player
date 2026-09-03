@@ -5,7 +5,7 @@ import { prisma } from "../lib/prisma.js";
 import { authenticate } from "../hooks/auth.js";
 
 
-const registerOpen = true; // Set to false to disable registration
+const registerOpen = process.env.REGISTER_OPEN === "true"; // Set to false to disable registration
 
 export async function authRoutes(
   server: FastifyInstance
