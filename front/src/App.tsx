@@ -17,6 +17,9 @@ import type { Album as AlbumType } from "./types/Album";
 
 import type { Artist as ArtistType } from "./types/Artist";
 
+import { useNotification } from "./hooks/useNotification";
+import Notification from "./components/Notification";
+
 
 function App() {
 
@@ -44,6 +47,11 @@ function App() {
     useState<AlbumType[]>([]);
 
   const [userName, setUserName] = useState("");
+
+  const { 
+    notification,
+    showNotification,
+  } = useNotification();
 
 
 //todo: combine the timeout and loadCurrentUser,
@@ -192,12 +200,18 @@ const handleAddToQueue = async (song: SongType) => {
 
     const data = await response.json();
 
+    if (response.status === 409) {
+      showNotification("Queue is full");
+      return;
+    }
+
     if (!response.ok) {
       console.error("Failed to add song to queue:", data.error);
       return;
     }
 
     console.log("Added to queue:", data);
+    showNotification(`Added "${song.title}" to queue`);
   } catch (error) {
     console.error("Error adding song to queue:", error);
   }
@@ -452,6 +466,9 @@ const handleLogout = async () => {
   return (
   <div className="app">
 
+    {notification && (
+      <Notification message={notification} />
+    )}
 
     <Main
       albums={albums}

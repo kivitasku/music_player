@@ -50,7 +50,7 @@ export async function queueRoutes(server: FastifyInstance) {
       });
 
       if (queueSize >= MAX_QUEUE_SIZE) {
-        return reply.code(400).send({
+        return reply.code(409).send({
           error: `Queue cannot contain more than ${MAX_QUEUE_SIZE} songs`,
         });
       }
