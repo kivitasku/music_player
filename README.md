@@ -33,6 +33,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 
 ## Technical features
 - Back end offset searching
+- Nginx as reverse proxy
 
 ### Data import
 - Data import is currently run as a script with the user_id being 1 for authentication
@@ -72,9 +73,12 @@ This project is made to be an easy to deploy self hosted web-based music streami
 - Node.js
 - Fastify
 - TypeScript
+- Argon2
 - Prisma
 - PostgreSQL
-- Argon2
+
+### Infrastructure
+- Nginx
 
 ## Project structure
 ```bash
