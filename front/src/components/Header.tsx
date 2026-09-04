@@ -4,7 +4,6 @@ import SideMenu from "./SideMenu";
 interface HeaderProps {
   searchQuery: string;
   onSearch: (query: string) => void;
-  onImportMusic?: () => void;
   onShowArtists: () => void;
   onHome: () => void;
   onLogout: () => void;
@@ -17,7 +16,6 @@ interface HeaderProps {
 export default function Header({
   searchQuery,
   onSearch,
-  onImportMusic,
   onShowArtists,
   onHome,
   onLogout,
@@ -49,7 +47,6 @@ export default function Header({
           isOpen={menuOpen}
           onOpen={onOpen}
           onClose={onClose}
-          onImportMusic={onImportMusic}
           onShowArtists={onShowArtists}
           onHome={onHome}
           onLogout={onLogout}
