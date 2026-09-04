@@ -3,7 +3,21 @@ This project is made to be an easy to deploy self hosted web-based music streami
 
 
 ## Screenshots
-- To be added
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>Login</b><br><img src="screenshots/login.png" width="240"></td>
+      <td align="center"><b>Home</b><br><img src="screenshots/home.png" width="240"></td>
+      <td align="center"><b>Album</b><br><img src="screenshots/album.png" width="240"></td>
+    </tr>
+    <tr>
+      <td align="center"><b>Search</b><br><img src="screenshots/search.png" width="240"></td>
+      <td align="center"><b>Queue</b><br><img src="screenshots/queue.png" width="240"></td>
+      <td align="center"></td>
+    </tr>
+  </table>
+</div>
 
 ## Features
 - User authentication
