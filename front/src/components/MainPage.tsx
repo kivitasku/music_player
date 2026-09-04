@@ -22,7 +22,6 @@ interface MainPageProps {
   songs: SongType[];
   recentAlbums: AlbumType[];
   onPlay: (song: SongType) => void;
-  onImportMusic?: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   handleLogout: () => void;
@@ -51,7 +50,6 @@ export default function MainPage({
   songs,
   recentAlbums,
   onPlay,
-  onImportMusic,
   searchQuery,
   setSearchQuery,
   handleLogout,
@@ -226,7 +224,6 @@ export default function MainPage({
       <Header
         searchQuery={searchQuery}
         onSearch={setSearchQuery}
-        onImportMusic={onImportMusic}
         onOpen={() => setSideMenuOpen(true)}
         onClose={() => setSideMenuOpen(false)}
         onShowArtists={() => {
