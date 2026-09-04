@@ -131,7 +131,6 @@ const handleShowMoreArtists = async () => {
   if (loadingArtists) return;
 
   try {
-    setLoadingArtists(true);
 
     const data = await searchMusic(
       searchQuery.trim(),
@@ -159,7 +158,6 @@ const handleShowMoreAlbums = async () => {
   if (loadingAlbums) return;
 
   try {
-    setLoadingAlbums(true);
 
     const data = await searchMusic(
       searchQuery.trim(),
@@ -187,7 +185,6 @@ const handleShowMoreSongs = async () => {
   if (loadingSongs) return;
 
   try {
-    setLoadingSongs(true);
 
     const data = await searchMusic(
       searchQuery.trim(),

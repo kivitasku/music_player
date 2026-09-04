@@ -63,7 +63,37 @@ This project is made to be an easy to deploy self hosted web-based music streami
 - Argon2
 
 ## Project structure
-
+```bash
+.
+├── back/
+│   ├── prisma/
+│   │   ├── migrations/
+│   │   │   └── migration_files
+│   │   └── schema
+│   ├── scripts/
+│   │   └── import_scripts
+│   ├── src/
+│   │   ├── hooks/
+│   │   │   └── auth.ts
+│   │   ├── lib/
+│   │   │   └── prisma_client
+│   │   └── routes/
+│   │       └── api_rouets
+│   ├── server.ts
+│   ├── secure-session.d.ts
+│   └── .env
+└── front/
+    └── src/
+        ├── api/
+        │   └── api_call_functions
+        ├── components/
+        │   └── all_component_files
+        ├── hooks/
+        │   └── hook_files
+        ├── types/
+        │   └── types_for_song_artist_album
+        └── App.tsx
+```
 
 ## Installation
 
@@ -82,7 +112,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 - MAX_QUEUE_SIZE=5
 - MAX_RECENT_ALBUMS=8
 - REGISTER_OPEN=true
-- SESSION_MAX_AGE=21600 (6 hours: 6*60*60=21600)
+- SESSION_MAX_AGE=21600 (6 hours: 6 x 60 x 60=21600)
 
 ### Running
 
