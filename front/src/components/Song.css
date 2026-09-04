@@ -17,7 +17,8 @@
 }
 
 .song-current {
-  background: #2c7523;
+  background: #2b9c1c;
+  color: #000000;
 }
 
 .song:hover {
@@ -25,7 +26,7 @@
 }
 
 .song-current:hover {
-  background: #0c5003;
+  background: #1d6913;
 }
 
 .song-album-cover {
