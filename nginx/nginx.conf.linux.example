@@ -9,7 +9,7 @@ http {
         server_name _;
 
         # CHANGE THIS PATH
-        root /PATH/TO/music-app/frontend/dist;
+        root /PATH/TO/music_player/front/dist;
 
         # React frontend
         location / {

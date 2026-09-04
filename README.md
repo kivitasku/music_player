@@ -99,6 +99,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 │   │       └── api_rouets
 │   ├── server.ts
 │   ├── secure-session.d.ts
+│   ├── secret-key
 │   └── .env
 ├── front/
 │   └── src/
@@ -120,7 +121,7 @@ This project is made to be an easy to deploy self hosted web-based music streami
 ## Installation
 
 ### Requirements
-- Node
+- Node.js 22+
 - PostgreSQL
 - Nginx
 
@@ -136,13 +137,33 @@ npm run build
 
 ### Back 
 
+- Create empty database
+```bash
+psql - U postgres
+CREATE DATABASE music_player;
+```
+
+- Fill in database url in .env
 ```bash
 cd back
-npm install
-npx prisma migrate deploy
-cp .env.example .env 
-openssl rand -out secret-key 32 
+cp .env.example .env
+openssl rand -out secret-key 32
 ```
+
+
+```bash
+npm install
+npx prisma generate
+npx prisma migrate deploy
+```
+
+- nginx.conf configuration (add path to front/dist and nginx/conf/mime.types)
+
+- start script configuration (folder for nginx.exe)
+
+
+
+
 
 ### Configuration
 - Configuration is made in the backend env file
