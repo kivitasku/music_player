@@ -1,0 +1,16 @@
+@echo off
+title Music App
+
+echo Starting backend...
+start "Music Backend" cmd /k "cd /d %~dp0back && npm run dev"
+
+timeout /t 2 /nobreak >nul
+
+echo Starting Nginx...
+start "Nginx" cmd /k "cd /d *folder_for_nginx_exe* && nginx.exe -c "%~dp0nginx\nginx.conf""
+
+echo.
+echo Music app started!
+echo Open http://localhost
+echo.
+pause

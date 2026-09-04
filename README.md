@@ -82,17 +82,21 @@ This project is made to be an easy to deploy self hosted web-based music streami
 │   ├── server.ts
 │   ├── secure-session.d.ts
 │   └── .env
-└── front/
-    └── src/
-        ├── api/
-        │   └── api_call_functions
-        ├── components/
-        │   └── all_component_files
-        ├── hooks/
-        │   └── hook_files
-        ├── types/
-        │   └── types_for_song_artist_album
-        └── App.tsx
+├── front/
+│   └── src/
+│       ├── api/
+│       │   └── api_call_functions
+│       ├── components/
+│       │   └── all_component_files
+│       ├── hooks/
+│       │   └── hook_files
+│       ├── types/
+│       │   └── types_for_song_artist_album
+│       └── App.tsx
+├── nginx/
+│   └── nginx.conf
+├── start.bat
+└── start.sh
 ```
 
 ## Installation
@@ -100,21 +104,37 @@ This project is made to be an easy to deploy self hosted web-based music streami
 ### Requirements
 - Node
 - PostgreSQL
+- Nginx
 
 ### Setting up
 - clone repo
-- npm install
-- npx prisma migrate deploy
-- rename: .env.example -> .env
+### Front
+
+```bash
+cd front
+npm install
+npm run build
+```
+
+### Back 
+
+```bash
+cd back
+npm install
+npx prisma migrate deploy
+cp .env.example .env 
+openssl rand -out secret-key 32 
+```
 
 ### Configuration
-- Configuration is made in the env file
+- Configuration is made in the backend env file
 - MAX_QUEUE_SIZE=5
 - MAX_RECENT_ALBUMS=8
 - REGISTER_OPEN=true
-- SESSION_MAX_AGE=21600 (6 hours: 6 x 60 x 60=21600)
+- SESSION_MAX_AGE=21600 (6 hours: 6 x 60 x 60 = 21600)
 
 ### Running
+- to be completed
 
 
 ## Known limitations

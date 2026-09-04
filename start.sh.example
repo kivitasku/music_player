@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "Starting backend..."
+(
+    cd "$(dirname "$0")/back" || exit 1
+    npm run dev
+) &
+
+sleep 2
+
+echo "Starting Nginx..."
+sudo nginx -c "$(dirname "$0")/nginx/nginx.conf"
+
+echo
+echo "Music app started!"
+echo "Open http://localhost"
+echo
