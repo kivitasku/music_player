@@ -37,17 +37,22 @@ This project is made to be an easy to deploy self hosted web-based music streami
 
 ### Data import
 - Data import is currently run as a script with the user_id being 1 for authentication
+- Data is gathered through song metadata
 
 #### Import structure
+- Grouping albums by artist is optional, only cover images are searched by song filepath
 ```bash
 /res/ (configured in env)
-├── album1/
-│   ├── song1_file
-│   ├── song2_file
-│   └── cover_image_file
-└── album2/
-    ├── song1_file
-    └── cover_image_file
+├── artist1/
+│   ├── album1/
+│   │   ├── song1
+│   │   ├── song2
+│   │   └── cover_image_file
+│   └── album2/
+│       ├── song1
+│       └── cover_image_file
+└── artist2/
+    └── album1
 ```
 
 ### Supported file formats
@@ -147,10 +152,14 @@ CREATE DATABASE music_player;
 ```bash
 cd back
 cp .env.example .env
+```
+
+- Generate 32 byte secret-key in /back
+```bash
 openssl rand -out secret-key 32
 ```
 
-
+- Run npm commands to install packages and deploy prisma
 ```bash
 npm install
 npx prisma generate
@@ -162,10 +171,7 @@ npx prisma migrate deploy
 - start script configuration (folder for nginx.exe)
 
 
-
-
-
-### Configuration
+### Optional configuration
 - Configuration is made in the backend env file
 - MAX_QUEUE_SIZE=5
 - MAX_RECENT_ALBUMS=8
