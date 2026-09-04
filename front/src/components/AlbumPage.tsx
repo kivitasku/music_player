@@ -12,7 +12,6 @@ interface AlbumPageProps {
   onBack: () => void;
   onPlay: (song: SongType) => void;
   onSelectArtist: (artistId: number) => void;
-  onAddToQueue: (song: SongType) => void;
   onSongMenuOpen: (song: SongType, isAlbumPage: boolean) => void;
   currentSong: SongType | null;
 }
@@ -22,7 +21,6 @@ export default function AlbumPage({
   onBack,
   onPlay,
   onSelectArtist,
-  onAddToQueue,
   onSongMenuOpen,
   currentSong,
 }: AlbumPageProps) {

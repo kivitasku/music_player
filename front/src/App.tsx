@@ -32,10 +32,8 @@ function App() {
   const [searchQuery, setSearchQuery] =
     useState("");
 
-  //search results get info from these
-  const [albums, setAlbums] = useState<AlbumType[]>([]);
+  //old search results get info from these
   const [artists, setArtists] = useState<ArtistType[]>([]);
-  const [songs, setSongs] = useState<SongType[]>([]);
   
   //new search funtionality
   const [searchResults, setSearchResults] = useState({
@@ -212,47 +210,72 @@ const handleShowMoreSongs = async () => {
 //loads current user data from server if logged in
 const loadCurrentUser = async () => {
   try {
-    const response = await fetch(
-      "/api/auth/me",
-      {
-        credentials: "include",
-      }
-    );
+    const [userResponse, recentAlbumsResponse] =
+      await Promise.all([
+        fetch("/api/auth/me", {
+          credentials: "include",
+        }),
 
-    if (!response.ok) {
+        fetch("/api/auth/recent-albums", {
+          credentials: "include",
+        }),
+      ]);
+
+    // Authentication failed
+    if (!userResponse.ok) {
       setLoggedIn(false);
       return;
     }
 
-    const data = await response.json();
+    // Check recent albums response
+    if (!recentAlbumsResponse.ok) {
+      console.error("Failed to fetch recent albums");
+      setRecentAlbums([]);
+    }
 
+    // Convert responses to JSON
+    const userData = await userResponse.json();
+
+    let recentAlbumsData = [];
+
+    if (recentAlbumsResponse.ok) {
+      recentAlbumsData = await recentAlbumsResponse.json();
+      console.log("Recent albums fetched:", recentAlbumsData);
+    }
 
     // User is logged in
     setLoggedIn(true);
-    setUserName(data.username);
-
+    setUserName(userData.username);
 
     // Restore playback state
-    setPlaybackAlbumId(data.playback_album_id ?? null);
+    setPlaybackAlbumId(
+      userData.playback_album_id ?? null
+    );
+
     setPlaybackAlbumSongId(
-      data.playback_album_song_id ?? null
+      userData.playback_album_song_id ?? null
     );
 
     // Restore the last played song
-    setCurrentSong(data.songs ?? null);
+    setCurrentSong(userData.songs ?? null);
+
+    // Restore recent albums
+    setRecentAlbums(recentAlbumsData);
+
     // Don't automatically start playing after login
     setShouldAutoPlay(false);
-
   } catch (error) {
     console.error(
       "Authentication check failed:",
       error
     );
+
     setLoggedIn(false);
   } finally {
     setAuthLoading(false);
   }
 };
+
 
 //run the loadCurrentUser when the app starts
 useEffect(() => {
@@ -481,86 +504,6 @@ const handleSongEnded = async () => {
   }
 };
 
-
-
-// to be deleted, used to get all music data
-useEffect(() => {
-  if (!loggedIn) {
-    return;
-  }
-
-    const fetchMusicData = async () => {
-      try {
-        const [
-          songsResponse,
-          albumsResponse,
-          artistsResponse,
-          recentAlbumsResponse,
-        ] = await Promise.all([
-          fetch("/api/songs", {
-            credentials: "include",
-          }),
-
-          fetch("/api/albums", {
-            credentials: "include",
-          }),
-
-          fetch("/api/artists", {
-            credentials: "include",
-          }),
-
-          fetch(
-            "/api/auth/recent-albums",
-            {
-              credentials: "include",
-            }
-          ),
-        ]);
-
-        if (!songsResponse.ok) {
-          throw new Error("Failed to fetch songs");
-        }
-
-        if (!albumsResponse.ok) {
-          throw new Error("Failed to fetch albums");
-        }
-
-        if (!artistsResponse.ok) {
-          throw new Error("Failed to fetch artists");
-        }
-
-        if (!recentAlbumsResponse.ok) {
-          throw new Error(
-            "Failed to fetch recent albums"
-          );
-        }
-
-        const [
-          songsData,
-          albumsData,
-          artistsData,
-          recentAlbumsData,
-        ] = await Promise.all([
-          songsResponse.json(),
-          albumsResponse.json(),
-          artistsResponse.json(),
-          recentAlbumsResponse.json(),
-        ]);
-
-        setSongs(songsData);
-        setAlbums(albumsData);
-        setArtists(artistsData);
-        setRecentAlbums(recentAlbumsData);
-      } catch (error) {
-        console.error(
-          "Error fetching music data:",
-          error
-        );
-      }
-    };
-
-    fetchMusicData();
-  }, [loggedIn]);
 
 
 

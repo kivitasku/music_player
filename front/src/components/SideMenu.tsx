@@ -4,7 +4,6 @@ interface SideMenuProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  onImportMusic?: () => void;
   onShowArtists: () => void;
   onHome: () => void;
   onLogout: () => void;
@@ -14,7 +13,6 @@ export default function SideMenu({
   isOpen,
   onOpen,
   onClose,
-  onImportMusic,
   onShowArtists,
   onHome,
   onLogout,

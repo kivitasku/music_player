@@ -3,7 +3,6 @@ import type { Song as SongType } from "../types/Song";
 
 interface SongMenuProps {
   isOpen: boolean;
-  onOpen: () => void;
   onClose: () => void;
   song: SongType | null;
   onAddToQueue: (song: SongType) => void;
@@ -14,7 +13,6 @@ interface SongMenuProps {
 
 export default function SongMenu({
   isOpen,
-  onOpen,
   onClose,
   song,
   onAddToQueue,

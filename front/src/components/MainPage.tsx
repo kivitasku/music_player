@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import type { Album as AlbumType } from "../types/Album";
 import type { Artist as ArtistType } from "../types/Artist";
@@ -121,6 +121,24 @@ export default function MainPage({
 
   };
 
+
+  const handleSelectRecentAlbum = (albumId: number) => {
+    console.log("Selected album ID:", albumId);
+    const album = recentAlbums.find(
+      (album) => album.id === albumId
+      
+    );
+
+    if (!album) {
+      console.error("Album not found for ID:", albumId);
+      return;
+    }
+
+    resetView();
+    setSelectedAlbum(album);
+
+  };
+
   const handleSelectArtist = (artistId: number) => {
     resetView();
     setSelectedArtistId(artistId);
@@ -182,7 +200,6 @@ export default function MainPage({
           onBack={() => setSelectedAlbum(null)}
           onPlay={onPlay}
           onSelectArtist={setSelectedArtistId}
-          onAddToQueue={onAddToQueue}
           onSongMenuOpen={handleSongMenuOpen}
           currentSong={currentSong}
         />
@@ -199,7 +216,7 @@ export default function MainPage({
           <AlbumLink
             key={album.id}
             album={album}
-            onClick={album => handleSelectAlbum(album.id)}
+            onClick={album => handleSelectRecentAlbum(album.id)}
             onSelectArtist={handleSelectArtist}
           />
         ))}
@@ -227,7 +244,6 @@ export default function MainPage({
 
       <SongMenu
         isOpen={songMenuOpen}
-        onOpen={() => setSongMenuOpen(true)}
         onClose={() => setSongMenuOpen(false)}
         song={songMenuSong}
         isAlbumPage={songMenuIsAlbumPage}
